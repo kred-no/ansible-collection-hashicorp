@@ -1,0 +1,71 @@
+# Modules:
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_key_module.html
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_repository_module.html
+---
+- name: === REPOSITORY INSTALLATION ===
+  block:
+
+  - name: INSTALL | Refresh apt-cache
+    become: true
+    ansible.builtin.apt:
+      update_cache: true
+      cache_valid_time: 300
+
+  - name: INSTALL | Role requirement(s)
+    ansible.builtin.apt:
+      name: gpg
+      state: present
+    become: true
+
+  - name: INSTALL | Add HashiCorp repository gpg-key
+    become: true
+    ansible.builtin.apt_key:
+      url: https://apt.releases.hashicorp.com/gpg
+
+  - name: INSTALL | Add HashiCorp repository
+    become: true
+    ansible.builtin.apt_repository:
+      repo: "deb https://apt.releases.hashicorp.com {{ansible_distribution_release}} {{repo_branch|default('main')}}"
+      state: present
+      filename: hashicorp
+
+  - name: INSTALL | Install HashiCorp applications
+    become: true
+    ansible.builtin.apt:
+      name: >-
+        {%- if item.value['version'] == 'latest' -%}
+        {{item['key']}}
+        {%- else -%}
+        {{item['key']}}={{item.value['version']}}
+        {%- endif -%}
+      state: >-
+        {%- if item.value['install'] -%}present
+        {%- else -%}absent
+        {%- endif -%}
+      update_cache: true
+      cache_valid_time: 300
+    loop: "{{query('dict', cluster_merged)}}"
+    loop_control:
+      label: "{{item['key']}}={{item.value['version']}} (install: {{item.value['install']}})"
+
+# ===============================================
+
+  - name: DNS | IP-Tables requirement(s)
+    become: true
+    ansible.builtin.apt:
+      name: iptables-persistent
+      state: present
+      cache_valid_time: 3600
+    when: dns_merged['forward']
+
+# ===============================================
+
+  - name: CNI | Add kernel tools
+    become: true
+    ansible.builtin.apt:
+      name: kmod
+      state: present
+      cache_valid_time: 300
+    when: cni_merged['install']
+...

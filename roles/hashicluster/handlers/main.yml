@@ -1,0 +1,6 @@
+---
+# handlers file for hashicluster_install
+#- name: Restart service
+#  ansible.builtin.service:
+#    name: httpd
+#    state: stopped

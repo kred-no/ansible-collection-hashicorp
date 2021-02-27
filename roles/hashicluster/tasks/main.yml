@@ -1,0 +1,19 @@
+# Modules:
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_tasks_module.html
+---
+- name: === UNSUPPORTED ===
+  block:
+  - debug:
+      msg: "{{ansible_os_family}} not supported yet"
+  - meta: end_play
+  when: ansible_os_family|lower != 'debian'
+
+- include_tasks: "_install_{{ansible_os_family|lower}}.yml"
+- include_tasks: _config.yml
+
+- include_tasks: _cni.yml
+  when: cni_merged['install']
+
+- include_tasks: _dns.yml
+  when: dns_merged['forward']
+...

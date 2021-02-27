@@ -1,0 +1,20 @@
+namespace: kreditorforeningens_driftssentral_da
+name: hashicluster
+version: 0.1.0
+description: HashiCluster deployment (consul, vault, nomad)
+readme: README.md
+authors:
+- Rune Rønneseth <rune.ronneseth@kred.no>
+license_file: LICENSE
+tags:
+- vault
+- consul
+- nomad
+- hashicorp
+- cluster
+dependencies: {}
+repository: http://example.com/repository
+documentation: http://docs.example.com
+homepage: http://kred.no
+issues: http://example.com/issue/tracker
+build_ignore: []

@@ -1,0 +1,5 @@
+---
+# tasks file for example
+- name: Example output
+  debug:
+    var: ansible_os_family
