@@ -17,4 +17,10 @@
 
 - include_tasks: _dns.yml
   when: dns_merged['forward']
+
+- include_tasks: _systemd.yml
+  when: ansible_service_mgr == 'systemd'
+
+- name: Flush all handlers
+  ansible.builtin.meta: flush_handlers
 ...

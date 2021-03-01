@@ -1,6 +1,31 @@
+# Modules:
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_module.html
 ---
-# handlers file for hashicluster_install
-#- name: Restart service
-#  ansible.builtin.service:
-#    name: httpd
-#    state: stopped
+- name: === SYSTEMD SERVICE HANDLERS ===
+  block:
+
+  - name: systemd_reload_config
+    become: true
+    systemd:
+      daemon_reload: yes
+
+  - name: systemd_restart_vault
+    become: true
+    systemd:
+      name: vault
+      state: restarted
+
+  - name: systemd_restart_consul
+    become: true
+    systemd:
+      name: consul
+      state: restarted
+
+  - name: systemd_restart_nomad
+    become: true
+    systemd:
+      name: nomad
+      state: restarted
+
+  when: ansible_service_mgr == 'systemd'
+...

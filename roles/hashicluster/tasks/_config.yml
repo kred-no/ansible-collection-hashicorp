@@ -2,7 +2,7 @@
 # - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
 # - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
 ---
-- name: === DEFAULT CONFIG ===
+- name: === DEFAULT CONFIG FILE ===
   block:
   - name: CONFIG | Remove default configurationfile
     become: true
@@ -14,7 +14,7 @@
       label: "Removed {{item['key']}} default config"
     when: item.value['manage_config'] and item.value['install']
 
-- name: === CUSTOM CONFIG ===
+- name: === CUSTOM CONFIG FILE ===
   block:
   - name: CONFIG | Manage custom configurationfile
     become: true
@@ -24,6 +24,8 @@
       owner: "root"
       group: "root"
       mode: 0644
+    notify:
+    - "systemd_restart_{{item['key']}}"
     loop: "{{query('dict', cluster_merged)}}"
     loop_control:
       label: "/etc/{{item['key']}}.d/{{item['key']}}.json modified"
