@@ -1,4 +1,4 @@
-namespace: kreditorforeningens_driftssentral_da
+namespace: kds_rune
 name: hashicluster
 version: 0.1.0
 description: HashiCluster deployment (consul, vault, nomad)

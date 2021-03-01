@@ -1,5 +1,8 @@
 # Ansible Collection - kreditorforeningens_driftssentral_da.hashicluster
 
+Ansible Galaxy: https://galaxy.ansible.com/kds_rune/hashicluster
+GitHub: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
+
 Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
 - Supports both pinned & latest versions.
 - Optional management of CNI-plugins.
