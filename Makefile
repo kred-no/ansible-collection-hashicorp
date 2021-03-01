@@ -1,4 +1,4 @@
-export API_KEY				    ?= secret-key-here
+export API_KEY				      ?= secret-key-here
 export COLLECTION_NAMESPACE ?= `grep 'namespace:' galaxy.yml|awk '{print $$2}'`
 export COLLECTION_NAME      ?= `grep 'name:' galaxy.yml|awk '{print $$2}'`
 export COLLECTION_VERSION   ?= `grep 'version:' galaxy.yml|awk '{print $$2}'`
