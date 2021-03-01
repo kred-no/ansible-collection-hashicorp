@@ -9,4 +9,4 @@
 #### NOMAD
   * Support for installing CNI-plugins.
 #### CONSUL
-  * Support for configuring dns-routing via iptables.
+  * Support for configuring dns-forwarding via iptables (Debian).

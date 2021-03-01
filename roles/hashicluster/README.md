@@ -69,6 +69,7 @@ Example Playbook
         version: '0.9.1'
       dns:
         forward: true
+...
 ```
 
 License

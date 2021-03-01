@@ -51,7 +51,7 @@
     ansible.builtin.yum:
       name: iptables-services
       state: present
-  when: false #dns_merged['forward']
+  when: dns_merged['forward']
 
 # ===============================================
 
