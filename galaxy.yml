@@ -13,8 +13,8 @@ tags:
 - hashicorp
 - cluster
 dependencies: {}
-repository: http://example.com/repository
-documentation: http://docs.example.com
-homepage: http://kred.no
-issues: http://example.com/issue/tracker
+repository: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
+documentation: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
+homepage: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
+issues: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster/issues
 build_ignore: []
