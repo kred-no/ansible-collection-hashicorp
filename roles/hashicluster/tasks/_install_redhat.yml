@@ -49,7 +49,7 @@
   - name: DNS | IP-Tables requirement(s)
     become: true
     ansible.builtin.yum:
-      name: iptables-persistent
+      name: iptables-services
       state: present
   when: false #dns_merged['forward']
 

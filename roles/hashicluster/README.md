@@ -1,38 +1,82 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+Installation of HashiCorp Vault, Consul & Nomad
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+N/A
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+See 'vars/main.yml' & 'defaults/main.tf'
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+N/A
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+# - Skip Vault installation.
+# - Install Consul (rolling latest version), w/custom configuration.
+# - Install Nomad (pinned version), w/custom configuration.
+# - Download CNI plugins (pinned version).
+# - Forward dns-queries on port 53 to consul on port 8600.
+---
+- name: MoleculeConverge
+  hosts: all
+  gather_facts: true
+  tasks:
+  - name: "Include roles"
+    include_role:
+      name: hashicluster
+    vars:
+      cluster:
+        consul:
+          install: true
+          manage_config: true
+          config:
+            log_level: err
+            server: true
+            data_dir: /var/opt/consul
+            bootstrap_expect: 1
+            client_addr: "0.0.0.0"
+            ui: true
+            performance:
+              raft_multiplier: 10
+            recursors:
+            - 1.1.1.1
+            - 8.8.8.8
+            connect:
+              enabled: true
+            ports:
+              grpc: 8502
+        nomad:
+          install: true
+          version: '1.0.4'
+          manage_config: true
+          config:
+            server:
+              enabled: true
+              bootstrap_Expect: 1
+      cni:
+        install: true
+        version: '0.9.1'
+      dns:
+        forward: true
+```
 
 License
 -------
 
-BSD
+See [LICENSE](LICENSE)
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Rune Rønneseth, Kreditorforeningens Driftssentral DA
