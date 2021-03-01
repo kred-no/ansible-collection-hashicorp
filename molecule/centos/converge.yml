@@ -2,11 +2,14 @@
 - name: Converge
   hosts: all
   gather_facts: true
+
   tasks:
+
   - name: "Include roles"
     include_role:
       name: hashicluster
     vars:
+      #ansible_python_interpreter: /usr/bin/python3 # yum-modules requires python v2...
       cluster:
         consul:
           install: true

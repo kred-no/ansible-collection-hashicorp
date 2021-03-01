@@ -15,7 +15,7 @@
 
   - name: INSTALL | Add HashiCorp repository
     become: true
-    yum_repository:
+    ansible.builtin.yum_repository:
       name: hashicorp
       description: HashiCorp YUM repository
       baseurl: https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable

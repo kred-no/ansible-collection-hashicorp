@@ -14,7 +14,7 @@
 
   - name: INSTALL | Role requirement(s)
     ansible.builtin.apt:
-      name: gpg
+      name: gnupg
       state: present
     become: true
 

@@ -6,25 +6,18 @@ _cluster:
     service_enabled: false
     manage_config: false
     config: {}
-    certificates: {}
   consul:
     install: false
     version: latest
     service_enabled: false
     manage_config: false
     config: {}
-    certificates:
-    - path: /tmp/one.txt
-      value: Hello
-    - path: /tmp/two
-      value: World
   nomad:
     install: false
     version: latest
     service_enabled: false
     manage_config: false
     config: {}
-    certificates: {}
 cluster_merged: "{{_cluster|combine(cluster, recursive=true)}}"
 
 _cni:
