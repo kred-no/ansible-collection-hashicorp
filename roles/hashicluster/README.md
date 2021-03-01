@@ -1,13 +1,25 @@
-# Ansible Collection - kreditorforeningens_driftssentral_da.hashicluster
+Role Name
+=========
 
-Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
-- Supports both pinned & latest versions.
-- Optional management of CNI-plugins.
-- Optional management of configuration-files (YAML -> JSON).
-- Optional configuration of iptables forwarding (consul-dns). Only Debian/Ubuntu.
-- Optional System unit/service management.
+Installation of HashiCorp Vault, Consul & Nomad
 
-## EXAMPLE PLAYBOOK
+Requirements
+------------
+
+N/A
+
+Role Variables
+--------------
+
+See 'vars/main.yml' & 'defaults/main.tf'
+
+Dependencies
+------------
+
+N/A
+
+Example Playbook
+----------------
 
 ```yaml
 # - Skip Vault installation.
@@ -57,4 +69,15 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
         version: '0.9.1'
       dns:
         forward: true
+...
 ```
+
+License
+-------
+
+See [LICENSE](LICENSE)
+
+Author Information
+------------------
+
+Rune Rønneseth, Kreditorforeningens Driftssentral DA

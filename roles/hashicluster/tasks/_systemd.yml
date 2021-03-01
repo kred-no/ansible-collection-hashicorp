@@ -1,0 +1,18 @@
+# Modules:
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_module.html
+---
+- name: === SYSTEMD ===
+  block:
+
+  - name: SERVICE | Update HashiCorp Service(s)
+    ansible.builtin.systemd:
+      name: "{{item['key']}}"
+      enabled: "{{item.value['service_enabled']}}"
+      masked: false
+    notify:
+    - systemd_reload_config
+    - "systemd_restart_{{item['key']}}"
+    loop: "{{query('dict', cluster_merged)}}"
+    loop_control:
+      label: "Service {{item['key']}} state: {{item.value['service_enabled']}}"
+...

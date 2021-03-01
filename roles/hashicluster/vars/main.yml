@@ -1,0 +1,41 @@
+---
+_cluster:
+  vault:
+    install: false
+    version: latest
+    service_enabled: false
+    manage_config: false
+    config: {}
+    certificates: {}
+  consul:
+    install: false
+    version: latest
+    service_enabled: false
+    manage_config: false
+    config: {}
+    certificates:
+    - path: /tmp/one.txt
+      value: Hello
+    - path: /tmp/two
+      value: World
+  nomad:
+    install: false
+    version: latest
+    service_enabled: false
+    manage_config: false
+    config: {}
+    certificates: {}
+cluster_merged: "{{_cluster|combine(cluster, recursive=true)}}"
+
+_cni:
+  install: false
+  version: '0.9.1'
+  bin_folder: /opt/cni/bin
+  template_folder: /etc/cni/net.d
+  bridge_routing: false
+cni_merged: "{{_cni|combine(cni, recursive=true)}}"
+
+_dns:
+  forward: false
+  target_port: '8600'
+dns_merged: "{{_dns|combine(dns, recursive=true)}}"

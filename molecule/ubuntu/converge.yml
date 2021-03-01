@@ -1,22 +1,5 @@
-# Ansible Collection - kreditorforeningens_driftssentral_da.hashicluster
-
-Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
-- Supports both pinned & latest versions.
-- Optional management of CNI-plugins.
-- Optional management of configuration-files (YAML -> JSON).
-- Optional configuration of iptables forwarding (consul-dns). Only Debian/Ubuntu.
-- Optional System unit/service management.
-
-## EXAMPLE PLAYBOOK
-
-```yaml
-# - Skip Vault installation.
-# - Install Consul (rolling latest version), w/custom configuration.
-# - Install Nomad (pinned version), w/custom configuration.
-# - Download CNI plugins (pinned version).
-# - Forward dns-queries on port 53 to consul on port 8600.
 ---
-- name: MoleculeConverge
+- name: Converge
   hosts: all
   gather_facts: true
   tasks:
@@ -46,7 +29,6 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
               grpc: 8502
         nomad:
           install: true
-          version: '1.0.4'
           manage_config: true
           config:
             server:
@@ -54,7 +36,5 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
               bootstrap_Expect: 1
       cni:
         install: true
-        version: '0.9.1'
       dns:
         forward: true
-```

@@ -1,0 +1,26 @@
+namespace: kreditorforeningens_driftssentral_da
+name: hashicluster
+version: 0.1.0
+description: HashiCluster deployment (consul, vault, nomad)
+readme: README.md
+authors:
+- Rune Rønneseth <rune.ronneseth@kred.no>
+license_file: LICENSE
+
+tags:
+- vault
+- consul
+- nomad
+- hashicorp
+- cluster
+
+dependencies: {}
+
+repository: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
+documentation: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
+homepage: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
+issues: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster/issues
+
+build_ignore:
+- molecule
+- tests

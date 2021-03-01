@@ -1,0 +1,29 @@
+# Modules:
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_tasks_module.html
+---
+- name: === UNSUPPORTED OS FAMILY ===
+  block:
+  - debug:
+      msg: "{{ansible_os_family}} not supported"
+  - meta: end_play
+  when: not (ansible_os_family|lower != 'debian'
+        or ansible_os_family|lower != 'redhat')
+
+- include_tasks: "_install_{{ansible_os_family|lower}}.yml"
+- include_tasks: _config.yml
+
+- include_tasks: _cni.yml
+  when: cni_merged['install']
+
+# Only for Debian
+- include_tasks: _dns.yml
+  when:
+  - dns_merged['forward']
+  - ansible_os_family|lower == 'debian'
+
+- include_tasks: _systemd.yml
+  when: ansible_service_mgr == 'systemd'
+
+- name: Flush all handlers
+  ansible.builtin.meta: flush_handlers
+...
