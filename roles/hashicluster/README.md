@@ -31,8 +31,10 @@ Example Playbook
 - name: MoleculeConverge
   hosts: all
   gather_facts: true
+
   collections:
   - 'kds_rune.hashicluster'
+
   tasks:
   - name: "Include roles"
     include_role:

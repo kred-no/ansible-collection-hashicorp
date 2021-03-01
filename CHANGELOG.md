@@ -1,5 +1,10 @@
 # CHANGELOG
-## 0.1.0 (Unreleased)
+## 0.1.1 (2021-03-02)
+#### GENERAL
+  * Updated supported OS-matrix
+  * Added extra info (collections + python-req.) to examples
+
+## 0.1.0 (2021-03-01)
 #### GENERAL
   * Uses HashiCorp official package repositories.
   * Support for Debian (apt) & RedHat (yum) distributions.

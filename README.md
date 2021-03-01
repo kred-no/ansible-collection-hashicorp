@@ -22,8 +22,10 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
 - name: MoleculeConverge
   hosts: all
   gather_facts: true
+
   collections:
   - 'kds_rune.hashicluster'
+
   tasks:
   - name: "Include roles"
     include_role:
