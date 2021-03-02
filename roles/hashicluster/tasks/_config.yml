@@ -19,7 +19,7 @@
   - name: CONFIG | Update custom configuration
     become: true
     ansible.builtin.copy:
-      content: "{{item.value['config']|to_nice_json}}"
+      content: "{{item.value['config']|default('')|to_nice_json}}"
       dest: "/etc/{{item['key']}}.d/{{item['key']}}.json"
       owner: "root"
       group: "root"
