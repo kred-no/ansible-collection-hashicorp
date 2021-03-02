@@ -14,3 +14,8 @@ publish:
 .PHONY: version
 version:
 	@echo ${COLLECTION_NAMESPACE}-${COLLECTION_NAME}-${COLLECTION_VERSION}
+
+.PHONY: clean
+clean:
+	@rm -f *.tar.gz
+	@molecule destroy --all

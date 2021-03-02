@@ -1,9 +1,24 @@
 # Modules:
 # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_module.html
 ---
-- name: === SYSTEMD ===
+- name: === SYSTEMD DEFINITIONS ===
   block:
+  - name: SERVICE | Update service definition
+    ansible.builtin.template:
+      src: "{{item['key']}}.service.j2"
+      dest: "/lib/systemd/system/{{item['key']}}.service"
+      mode: '0644'
+    notify:
+    - systemd_reload_config
+    - "systemd_restart_{{item['key']}}"
+    loop: "{{query('dict', cluster_merged)}}"
+    loop_control:
+      label: "Service definition changed ({{item['key']}})"
+    when: item.value['install']
 
+- name: === SYSTEMD SERVICES ===
+  block:
+    # TODO: skip non-installed applications
   - name: SERVICE | Update HashiCorp Service(s)
     ansible.builtin.systemd:
       name: "{{item['key']}}"
@@ -15,4 +30,5 @@
     loop: "{{query('dict', cluster_merged)}}"
     loop_control:
       label: "Service {{item['key']}} state: {{item.value['service_enabled']}}"
+    when: item.value['install']
 ...
