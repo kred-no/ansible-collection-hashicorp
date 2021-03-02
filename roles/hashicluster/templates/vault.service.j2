@@ -8,8 +8,8 @@ StartLimitIntervalSec=60
 StartLimitBurst=3
 
 [Service]
-User=vault
-Group=vault
+User={{cluster_merged.vault.service['user']|default('root)}}
+Group={{cluster_merged.vault.service['user']|default('root)}}
 ProtectSystem=full
 ProtectHome=read-only
 PrivateTmp=yes

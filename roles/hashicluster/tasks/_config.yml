@@ -4,19 +4,19 @@
 ---
 - name: === DEFAULT CONFIG FILE ===
   block:
-  - name: CONFIG | Remove default configurationfile
+  - name: CONFIG | Remove default configuration
     become: true
     ansible.builtin.file:
       path: "/etc/{{item['key']}}.d/{{item['key']}}.hcl"
       state: absent
     loop: "{{query('dict', cluster_merged)}}"
     loop_control:
-      label: "Removed {{item['key']}} default config"
-    when: item.value['manage_config'] and item.value['install']
+      label: "Remove default {{item['key']}} configuration"
+    when: item.value['install']
 
 - name: === CUSTOM CONFIG FILE ===
   block:
-  - name: CONFIG | Manage custom configurationfile
+  - name: CONFIG | Update custom configuration
     become: true
     ansible.builtin.copy:
       content: "{{item.value['config']|to_nice_json}}"
@@ -28,6 +28,6 @@
     - "systemd_restart_{{item['key']}}"
     loop: "{{query('dict', cluster_merged)}}"
     loop_control:
-      label: "/etc/{{item['key']}}.d/{{item['key']}}.json modified"
-    when: item.value['manage_config'] and item.value['install']
+      label: "Modify /etc/{{item['key']}}.d/{{item['key']}}.json"
+    when: item.value['install']
 ...

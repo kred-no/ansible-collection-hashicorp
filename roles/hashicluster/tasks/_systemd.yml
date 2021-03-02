@@ -13,22 +13,21 @@
     - "systemd_restart_{{item['key']}}"
     loop: "{{query('dict', cluster_merged)}}"
     loop_control:
-      label: "Service definition changed ({{item['key']}})"
+      label: "Update {{item['key']}} unit-file"
     when: item.value['install']
 
 - name: === SYSTEMD SERVICES ===
   block:
-    # TODO: skip non-installed applications
   - name: SERVICE | Update HashiCorp Service(s)
     ansible.builtin.systemd:
       name: "{{item['key']}}"
-      enabled: "{{item.value['service_enabled']}}"
-      masked: false
+      enabled: "{{item.value['service['enabled']']}}"
+      masked: "{{item.value['service['masked']']}}"
     notify:
     - systemd_reload_config
     - "systemd_restart_{{item['key']}}"
     loop: "{{query('dict', cluster_merged)}}"
     loop_control:
-      label: "Service {{item['key']}} state: {{item.value['service_enabled']}}"
+      label: "Service {{item['key']}} state: {{item.value['service['enabled']']}}"
     when: item.value['install']
 ...
