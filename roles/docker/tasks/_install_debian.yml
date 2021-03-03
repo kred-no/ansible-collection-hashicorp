@@ -46,7 +46,10 @@
 - name: INSTALL | Docker application
   become: true
   ansible.builtin.apt:
-    name: docker
+    pkg:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
     state: present
   notify:
   - systemd_reload

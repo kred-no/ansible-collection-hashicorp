@@ -8,6 +8,6 @@
 - name: systemd_restart
   become: true
   systemd:
-    name: docker
+    name: docker.service
     state: restarted
 ...
