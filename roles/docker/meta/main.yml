@@ -7,13 +7,10 @@ galaxy_info:
   min_ansible_version: 2.9
 
   platforms:
-   #- name: CentOS
-   #  versions:
-   #  - 8
-   - name: Ubuntu
-     versions:
-     - 20.04
-     - 18.04
+  - name: Ubuntu
+    versions:
+    - 20.04
+    - 18.04
 
   galaxy_tags:
   - docker

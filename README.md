@@ -1,17 +1,17 @@
 # Ansible Collection - kreditorforeningens_driftssentral_da.hashicluster
 
-> Ansible Galaxy: https://galaxy.ansible.com/kds_rune/hashicluster
+**[Ansible Galaxy](https://galaxy.ansible.com/kds_rune/hashicluster) | [GitHub](https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster)**
 
-> GitHub: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
-
+## DESCRIPTION
 Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
-- Supports both pinned & latest versions.
-- Optional management of CNI-plugins.
-- Optional management of configuration-files (YAML -> JSON).
-- Optional configuration of iptables forwarding (consul-dns). Only Debian/Ubuntu.
-- Optional System unit/service management.
 
-**KISS:** The primary goal is to keep collection/roles/plays as clean, readable and requiring as little maintenance as possible.
+  * Supports both pinned & latest versions.
+  * Optional management of CNI-plugins.
+  * Optional management of configuration-files (YAML -> JSON).
+  * Optional configuration of iptables forwarding (consul-dns). Only Debian/Ubuntu.
+  * Optional System unit/service management.
+
+**KISS:** The primary goal is to keep the collection/roles/plays as clean, readable and requiring as little maintenance as possible.
 
 ## EXAMPLE PLAYBOOK
 
@@ -21,6 +21,7 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
 # - Install Nomad (pinned version), w/custom configuration.
 # - Download CNI plugins (pinned version).
 # - Forward dns-queries on port 53 to consul on port 8600.
+# - Install basic docker-role included in repo
 ---
 - name: MoleculeConverge
   hosts: all
@@ -30,7 +31,11 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
   - 'kds_rune.hashicluster'
 
   tasks:
-  - name: "Include roles"
+  - name: Install Docker driver
+    include_role:
+      name: docker
+
+  - name: Install Cluster applications
     include_role:
       name: hashicluster
     vars:

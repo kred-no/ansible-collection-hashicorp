@@ -1,7 +1,7 @@
 # CHANGELOG
-## 0.1.3 (Unreleased)
+## 0.1.3 (2021-03-03)
 #### GENERAL
-  * Added basic docker role
+  * Added basic docker role (Debian/Ubuntu)
 
 ## 0.1.2 (2021-03-03)
 #### GENERAL
