@@ -21,7 +21,6 @@
       cluster:
         consul:
           install: true
-          manage_config: true
           config:
             log_level: err
             server: true
@@ -40,7 +39,6 @@
               grpc: 8502
         nomad:
           install: true
-          manage_config: true
           config:
             server:
               enabled: true

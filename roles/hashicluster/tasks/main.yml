@@ -19,12 +19,10 @@
   include_tasks: _cni.yml
   when: cni_merged['install']
 
-# Only for Debian
 - name: Manage iptables forwarding (dns)
   include_tasks: _dns.yml
   when: # list means 'AND' between conditions
   - dns_merged['forward']
-  - ansible_os_family|lower == 'debian'
 
 - name: Manage systemd unit/services
   include_tasks: _systemd.yml

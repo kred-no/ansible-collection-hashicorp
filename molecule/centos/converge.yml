@@ -13,7 +13,6 @@
       cluster:
         consul:
           install: true
-          manage_config: true
           config:
             data_dir: /var/lib/consul
             server: true
@@ -32,7 +31,6 @@
             log_level: err
         nomad:
           install: true
-          manage_config: true
           config:
             data_dir: /var/lib/nomad
             server:

@@ -1,4 +1,9 @@
 # CHANGELOG
+## 0.1.2 (2021-03-03)
+#### GENERAL
+  * Added service-templates, since the defaults use .hcl & validate its existence
+  * Enforce custom configfile & servicefile. It's just easier this way..
+
 ## 0.1.1 (2021-03-02)
 #### GENERAL
   * Updated supported OS-matrix

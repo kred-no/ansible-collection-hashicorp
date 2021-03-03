@@ -1,25 +1,36 @@
+# Configuration defaults.
+# Override these by setting the corresponding named
+# variable, without the '_' prefix
 ---
+# HashiCorp Cluster applications settings
 _cluster:
   vault:
     install: false
     version: latest
-    service_enabled: false
-    manage_config: false
+    service:
+      enabled: false
+      masked: false
+      user: root
     config: {}
   consul:
     install: false
     version: latest
-    service_enabled: false
-    manage_config: false
+    service:
+      enabled: false
+      masked: false
+      user: root
     config: {}
   nomad:
     install: false
     version: latest
-    service_enabled: false
-    manage_config: false
+    service:
+      enabled: false
+      masked: false
+      user: root
     config: {}
 cluster_merged: "{{_cluster|combine(cluster, recursive=true)}}"
 
+# CNI installation (Nomad/bridged networking)
 _cni:
   install: false
   version: '0.9.1'
@@ -28,6 +39,7 @@ _cni:
   bridge_routing: false
 cni_merged: "{{_cni|combine(cni, recursive=true)}}"
 
+# DNS forwarding vi iptables
 _dns:
   forward: false
   target_port: '8600'
