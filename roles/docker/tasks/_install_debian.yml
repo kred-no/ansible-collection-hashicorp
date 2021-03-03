@@ -1,0 +1,56 @@
+# Source: https://docs.docker.com/engine/install/ubuntu/
+# Modules:
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_repository_module.html
+---
+
+- name: INSTALL | Refresh apt-cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 300
+
+- name: INSTALL | Cleanup old packages
+  become: true
+  ansible.builtin.apt:
+    pkg:
+    - docker
+    - docker-engine
+    - docker.io
+    - containerd
+    - runc
+    state: absent
+
+- name: INSTALL | Required packages
+  become: true
+  ansible.builtin.apt:
+    pkg:
+    - apt-transport-https
+    - curl
+    - ca-certificates
+    - gnupg
+    state: present
+
+- name: INSTALL | Add Docker gpg-key
+  become: true
+  ansible.builtin.apt_key:
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+
+- name: INSTALL | Add Docker repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release|default('focal')}} {{repo_branch|default('stable')}}"
+    state: present
+    filename: docker
+
+- name: INSTALL | Docker application
+  become: true
+  ansible.builtin.apt:
+    pkg:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    state: present
+  notify:
+  - systemd_reload
+...

@@ -1,0 +1,4 @@
+---
+# defaults file for docker
+repo_branch: stable
+service_state: started
