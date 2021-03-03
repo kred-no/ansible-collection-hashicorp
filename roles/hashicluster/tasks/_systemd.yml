@@ -4,6 +4,7 @@
 - name: === SYSTEMD DEFINITIONS ===
   block:
   - name: SERVICE | Update service definition
+    become: true
     ansible.builtin.template:
       src: "{{item['key']}}.service.j2"
       dest: "/lib/systemd/system/{{item['key']}}.service"
@@ -19,6 +20,7 @@
 - name: === SYSTEMD SERVICES ===
   block:
   - name: SERVICE | Update HashiCorp Service(s)
+    become: true
     ansible.builtin.systemd:
       name: "{{item['key']}}"
       enabled: "{{item.value['service['enabled']']}}"
