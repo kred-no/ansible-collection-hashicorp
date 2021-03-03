@@ -43,7 +43,6 @@ Example Playbook
       cluster:
         consul:
           install: true
-          manage_config: true
           config:
             log_level: err
             server: true
@@ -63,7 +62,7 @@ Example Playbook
         nomad:
           install: true
           version: '1.0.4'
-          manage_config: true
+          service: { enabled: false }
           config:
             server:
               enabled: true
