@@ -12,7 +12,6 @@ _cluster:
       masked: false
       user: root
     config: {}
-
   consul:
     install: false
     version: latest
@@ -21,7 +20,6 @@ _cluster:
       masked: false
       user: root
     config: {}
-
   nomad:
     install: false
     version: latest
