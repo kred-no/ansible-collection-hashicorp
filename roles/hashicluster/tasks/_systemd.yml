@@ -23,13 +23,13 @@
     become: true
     ansible.builtin.systemd:
       name: "{{item['key']}}"
-      enabled: "{{item.value['service['enabled']']}}"
-      masked: "{{item.value['service['masked']']}}"
+      enabled: "{{item.value.service['enabled']}}"
+      masked: "{{item.value.service['masked']}}"
     notify:
     - systemd_reload_config
     - "systemd_restart_{{item['key']}}"
     loop: "{{query('dict', cluster_merged)}}"
     loop_control:
-      label: "Service {{item['key']}} state: {{item.value['service['enabled']']}}"
+      label: "Service {{item['key']}} state: {{item.value.service['enabled']}}"
   when: item.value['install']
 ...
