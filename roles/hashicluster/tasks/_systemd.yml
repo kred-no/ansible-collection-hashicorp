@@ -15,7 +15,7 @@
     loop: "{{query('dict', cluster_merged)}}"
     loop_control:
       label: "Update {{item['key']}} unit-file"
-    when: item.value['install']
+  when: item.value['install']
 
 - name: === SYSTEMD SERVICES ===
   block:
@@ -31,5 +31,5 @@
     loop: "{{query('dict', cluster_merged)}}"
     loop_control:
       label: "Service {{item['key']}} state: {{item.value['service['enabled']']}}"
-    when: item.value['install']
+  when: item.value['install']
 ...
