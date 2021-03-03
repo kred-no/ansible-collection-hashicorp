@@ -6,8 +6,8 @@ After=network-online.target
 ConditionDirectoryNotEmpty=/etc/nomad.d/
 
 [Service]
-User={{cluster_merged.nomad.service['user']|default('root)}}
-Group={{cluster_merged.nomad.service['user']|default('root)}}
+User={{cluster_merged.nomad.service['user']|default('root')}}
+Group={{cluster_merged.nomad.service['user']|default('root')}}
 ExecReload=/bin/kill -HUP $MAINPID
 ExecStart=/usr/bin/nomad agent -config /etc/nomad.d
 KillMode=process
