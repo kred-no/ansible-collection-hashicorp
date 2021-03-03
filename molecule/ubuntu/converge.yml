@@ -9,7 +9,6 @@
     ansible.builtin.package:
       name:
       - python3-minimal
-      #- apt-transport-https
       state: present
 
   tasks:

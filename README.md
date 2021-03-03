@@ -11,6 +11,8 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
 - Optional configuration of iptables forwarding (consul-dns). Only Debian/Ubuntu.
 - Optional System unit/service management.
 
+**KISS:** The primary goal is to keep collection/roles/plays as clean, readable and requiring as little maintenance as possible.
+
 ## EXAMPLE PLAYBOOK
 
 ```yaml

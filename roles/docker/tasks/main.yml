@@ -1,0 +1,20 @@
+# Modules:
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_tasks_module.html
+---
+- name: === UNSUPPORTED OS FAMILY ===
+  block:
+  - debug:
+      msg: "{{ansible_os_family}} is not supported"
+  - meta: end_play
+  when: not (ansible_os_family|lower == 'debian')
+
+- name: Manage application installation
+  include_tasks: "_install_{{ansible_os_family|lower}}.yml"
+
+- name: Manage systemd unit/services
+  include_tasks: _systemd.yml
+  when: ansible_service_mgr == 'systemd'
+
+- name: Flush all handlers
+  ansible.builtin.meta: flush_handlers
+...

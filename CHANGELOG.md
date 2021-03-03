@@ -1,4 +1,8 @@
 # CHANGELOG
+## 0.1.3 (Unreleased)
+#### GENERAL
+  * Added basic docker role
+
 ## 0.1.2 (2021-03-03)
 #### GENERAL
   * Added service-templates, since the defaults use .hcl & validate its existence
