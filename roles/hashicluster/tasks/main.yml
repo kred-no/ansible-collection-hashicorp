@@ -6,18 +6,16 @@
   - debug:
       msg: "{{ansible_os_family}} is not supported"
   - meta: end_play
-  when: not (ansible_os_family|lower != 'debian'
-        or ansible_os_family|lower != 'redhat')
+  when:
+  - ansible_os_family|lower != 'debian'
+  - ansible_os_family|lower != 'redhat'
+  - not force_install|default(false)
 
 - name: Manage application installation
   include_tasks: "_install_{{ansible_os_family|lower}}.yml"
 
 - name: Manage application configuration
   include_tasks: _config.yml
-
-- name: Manage CNI plugins
-  include_tasks: _cni.yml
-  when: cni_merged['install']
 
 - name: Manage iptables forwarding (dns)
   include_tasks: _dns.yml

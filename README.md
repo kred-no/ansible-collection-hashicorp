@@ -35,10 +35,20 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
     include_role:
       name: docker
 
+- name: Install CNI plugins
+    include_role:
+      name: cni
+    vars:
+      cni:
+        install: true
+        version: '0.9.1'
+
   - name: Install Cluster applications
     include_role:
       name: hashicluster
     vars:
+      dns:
+        forward: true
       cluster:
         consul:
           install: true
@@ -66,9 +76,4 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
             server:
               enabled: true
               bootstrap_Expect: 1
-      cni:
-        install: true
-        version: '0.9.1'
-      dns:
-        forward: true
 ```

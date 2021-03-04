@@ -1,0 +1,12 @@
+# APPLICATION OVERRIDE VALUES
+# See 'vars' for default values
+---
+# ===========================
+# EXAMPLE CONFIG
+# ===========================
+#  cni:
+#    install: true
+cni: {}
+
+# Try to install even if OS is not supported
+force_install: false

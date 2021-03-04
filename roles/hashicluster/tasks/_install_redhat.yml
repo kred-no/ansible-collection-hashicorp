@@ -52,15 +52,4 @@
       name: iptables-services
       state: present
   when: dns_merged['forward']
-
-# ===============================================
-
-- name: === CNI PACKAGE INSTALLATION ===
-  block:
-  - name: CNI | Add kernel tools
-    become: true
-    ansible.builtin.yum:
-      name: kmod
-      state: present
-  when: cni_merged['install']
 ...

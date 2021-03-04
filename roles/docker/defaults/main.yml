@@ -2,3 +2,6 @@
 # defaults file for docker
 repo_branch: stable
 service_state: started
+
+# Try to install even if OS is not supported
+force_install: false

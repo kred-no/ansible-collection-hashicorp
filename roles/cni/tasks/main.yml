@@ -8,15 +8,10 @@
   - meta: end_play
   when:
   - ansible_os_family|lower != 'debian'
+  - ansible_os_family|lower != 'redhat'
   - not force_install|default(false)
 
-- name: Manage application installation
-  include_tasks: "_install_{{ansible_os_family|lower}}.yml"
-
-- name: Manage systemd unit/services
-  include_tasks: _systemd.yml
-  when: ansible_service_mgr == 'systemd'
-
-- name: Flush all handlers
-  ansible.builtin.meta: flush_handlers
+- name: Install
+  include_tasks: "_install.yml"
+  when: cni['install']
 ...
