@@ -1,5 +1,7 @@
 # CHANGELOG
 ## 0.1.5 (2021-03-04)
+#### GENERAL
+  * Fixed CRLF -> LF ..
 #### CNI
   * New task for adding kernel modules (br_netfilter)
 
