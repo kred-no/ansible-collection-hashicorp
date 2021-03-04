@@ -1,5 +1,5 @@
 # CHANGELOG
-## 0.1.5 (Unreleased)
+## 0.1.5 (2021-03-04)
 #### CNI
   * New task for adding kernel modules (br_netfilter)
 
