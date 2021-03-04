@@ -14,12 +14,24 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
 **KISS:** The primary goal is to keep the collection/roles/plays as clean, readable and requiring as little maintenance as possible.
 
 ## EXAMPLE PLAYBOOK
-
+> File: requirements.yml
 ```yaml
+# Example for downloading directly from git
+---
+collections:
+- name: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster.git
+  type: git
+  version: development
+...
+```
+
+> File: playbook.yaml
+```yaml
+# - Install Docker
+# - Download CNI plugins (pinned version).
 # - Skip Vault installation.
 # - Install Consul (rolling latest version), w/custom configuration.
 # - Install Nomad (pinned version), w/custom configuration.
-# - Download CNI plugins (pinned version).
 # - Forward dns-queries on port 53 to consul on port 8600.
 # - Install basic docker-role included in repo
 ---
@@ -28,14 +40,14 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
   gather_facts: true
 
   collections:
-  - 'kds_rune.hashicluster'
+  - 'kred.hashicluster'
 
   tasks:
-  - name: Install Docker driver
+  - name: Install Docker
     include_role:
       name: docker
 
-- name: Install CNI plugins
+  - name: Install CNI-Plugins
     include_role:
       name: cni
     vars:
@@ -76,4 +88,15 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
             server:
               enabled: true
               bootstrap_Expect: 1
+...
 ```
+
+> Execute playbook
+```bash
+# Install collection
+ansible-galaxy collection install -r requirements.yml
+
+# Run plays
+ansible-playbook playbook.yml --become
+```
+
