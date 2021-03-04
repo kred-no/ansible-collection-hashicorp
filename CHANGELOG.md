@@ -1,5 +1,9 @@
 # CHANGELOG
-## 0.1.4 (Unreleased)
+## 0.1.5 (Unreleased)
+#### CNI
+  * New task for adding kernel modules (br_netfilter)
+
+## 0.1.4 (2021-03-04)
 #### GENERAL
   * Changed to 'kred' namespace
   * Moved cni-plugins to separate role

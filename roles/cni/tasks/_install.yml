@@ -3,6 +3,7 @@
 # - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
 # - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html
 # - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
+# - https://docs.ansible.com/ansible/latest/collections/community/general/modprobe_module.html
 # - https://docs.ansible.com/ansible/latest/collections/ansible/posix/sysctl_module.html
 ---
 - name: CNI | Create directories
@@ -70,19 +71,31 @@
   loop_control:
     label: "Update file {{item['dest']}}"
 
-- name: CNI | Update sysctl settings
-  become: true
-  ansible.posix.sysctl:
-    name: "{{item['name']}}"
-    value: "{{item['value']|default('1')}}"
-    state: "{{item['state']|default('present')}}"
-    sysctl_file: '/etc/sysctl.d/50-hashicluster-cni.conf'
-    reload: true
-  loop:
-  - name: 'net.bridge.bridge-nf-call-arptables'
-  - name: 'net.bridge.bridge-nf-call-ip6tables'
-  - name: 'net.bridge.bridge-nf-call-iptables'
-  loop_control:
-    label: "Update sysctl-setting {{item['name']}}"
+- name: === KERNEL CONFIGURATION ===
+  block:
+  - name: CNI | Add required module(s)
+    become: true
+    community.general.modprobe:
+      name: "{{item['name']}}"
+      state: "{{item['state']|default('present')}}"
+    loop:
+    - name: br_netfilter # /etc/modules-load.d/br_netfilter.conf
+    loop_control:
+      label: "Update kernel-module {{item['name']}}"
+
+  - name: CNI | Update sysctl settings
+    become: true
+    ansible.posix.sysctl:
+      name: "{{item['name']}}"
+      value: "{{item['value']|default('1')}}"
+      state: "{{item['state']|default('present')}}"
+      sysctl_file: '/etc/sysctl.d/50-hashicluster-cni.conf'
+      reload: true
+    loop:
+    - name: 'net.bridge.bridge-nf-call-arptables'
+    - name: 'net.bridge.bridge-nf-call-ip6tables'
+    - name: 'net.bridge.bridge-nf-call-iptables'
+    loop_control:
+      label: "Update sysctl-setting {{item['name']}}"
   when: ansible_service_mgr == 'systemd'
 ...

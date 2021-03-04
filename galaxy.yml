@@ -1,6 +1,6 @@
 namespace: kred
 name: hashicluster
-version: 0.1.4
+version: 0.1.5
 description: HashiCluster deployment (consul, vault, nomad)
 readme: README.md
 authors:
