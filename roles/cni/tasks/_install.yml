@@ -1,0 +1,88 @@
+# Modules:
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html
+# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html
+# - https://docs.ansible.com/ansible/latest/collections/ansible/posix/sysctl_module.html
+---
+- name: CNI | Create directories
+  become: true
+  ansible.builtin.file:
+    dest: "{{item['dest']}}"
+    owner: "{{item['owner']|default('root')}}"
+    group: "{{item['group']|default('root')}}"
+    mode: "{{item['mode']|default('0755')}}"
+    state: directory
+  loop:
+  - dest: "{{cni_merged['bin_folder']}}"
+    owner: "{{cni_merged['owner']}}"
+    group: "{{cni_merged['owner']}}"
+  - dest: "{{cni_merged['template_folder']}}"
+    owner: "{{cni_merged['owner']}}"
+    group: "{{cni_merged['owner']}}"
+  - dest: "/etc/sysctl.d"
+
+- name: CNI | Download archive
+  become: true
+  ansible.builtin.get_url:
+    url: "http://github.com/containernetworking/plugins/releases/download/v{{item['version']}}/cni-plugins-linux-amd64-v{{item['version']}}.tgz"
+    dest: "{{item['dest']}}/cni-plugins-linux-amd64-v{{item['version']}}.tgz"
+    checksum: "sha1:https://github.com/containernetworking/plugins/releases/download/v{{item['version']}}/cni-plugins-linux-amd64-v{{item['version']}}.tgz.sha1"
+    mode: '0644'
+    timeout: 300
+  loop:
+  - version: "{{cni_merged['version']}}"
+    dest: /tmp
+  loop_control:
+    label: "Download CNI archive v{{item['version']}} to {{item['dest']}})"
+  register: result
+  until: result is succeeded
+
+- name: CNI | Unarchive
+  ansible.builtin.unarchive:
+    src: "{{item['src']}}"
+    dest: "{{item['dest']}}"
+    owner: "{{item['owner']|default('root')}}"
+    group: "{{item['group']|default('root')}}"
+    mode: '0755'
+    remote_src: true
+  loop:
+  - src: "/tmp/cni-plugins-linux-amd64-v{{cni_merged['version']}}.tgz"
+    dest: "{{cni_merged['bin_folder']}}"
+    owner: "{{cni_merged['owner']}}"
+    group: "{{cni_merged['group']}}"
+  loop_control:
+    label: "Unarchive {{item['src']}} to {{item['dest']}}"
+
+- name: CNI | Copy templates
+  become: true
+  ansible.builtin.template:
+    dest: "{{item['dest']}}"
+    src: "{{item['src']}}"
+    owner: "{{item['owner']|default('root')}}"
+    group: "{{item['group']|default('root')}}"
+    mode: "{{item['mode']|default('0644')}}"
+  loop:
+  - src: loopback.conf.j2
+    dest: /etc/cni/net.d/99-loopback.conf
+    owner: "{{cni_merged['owner']}}"
+    group: "{{cni_merged['group']}}"
+  loop_control:
+    label: "Update file {{item['dest']}}"
+
+- name: CNI | Update sysctl settings
+  become: true
+  ansible.posix.sysctl:
+    name: "{{item['name']}}"
+    value: "{{item['value']|default('1')}}"
+    state: "{{item['state']|default('present')}}"
+    sysctl_file: '/etc/sysctl.d/50-hashicluster-cni.conf'
+    reload: true
+  loop:
+  - name: 'net.bridge.bridge-nf-call-arptables'
+  - name: 'net.bridge.bridge-nf-call-ip6tables'
+  - name: 'net.bridge.bridge-nf-call-iptables'
+  loop_control:
+    label: "Update sysctl-setting {{item['name']}}"
+  when: ansible_service_mgr == 'systemd'
+...

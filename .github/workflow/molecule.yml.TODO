@@ -1,0 +1,67 @@
+---
+name: Test Role
+on:
+  pull_request:
+  push:
+    branches: ['master']
+  #schedule:
+  #- cron: "0 7 * * 2"
+
+#defaults:
+#  run:
+#    working-directory: 'example'
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code.
+        uses: actions/checkout@v2
+        with:
+          path: 'geerlingguy.java'
+
+      - name: Set up Python3.
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies.
+        run: python3 -m pip install yamllint ansible ansible-lint
+
+      - name: Lint code.
+        run: |
+          yamllint .
+          ansible-lint
+
+  molecule:
+    name: Molecule
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        distro:
+        - centos8
+        - ubuntu2004
+        - ubuntu1804
+        - debian10
+
+    steps:
+      - name: Checkout code.
+        uses: actions/checkout@v2
+        with:
+          path: 'example'
+
+      - name: Set up Python3.
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies.
+        run: python3 -m pip install ansible molecule[docker] docker
+
+      - name: Run tests.
+        run: molecule test
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
+          MOLECULE_DISTRO: ${{ matrix.distro }}

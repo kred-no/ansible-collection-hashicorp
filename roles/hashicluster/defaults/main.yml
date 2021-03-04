@@ -2,20 +2,16 @@
 # See 'vars' for default values
 ---
 cluster: {}
-cni: {}
 dns: {}
 
 # ===========================
 # EXAMPLE CONFIG
 # ===========================
-#  cni:
-#    install: true
 #  dns:
 #    forward: true
 #  cluster:
 #    consul:
 #      install: true
-#      manage_config: true
 #      config:
 #        log_level: err
 #        server: true
@@ -34,8 +30,10 @@ dns: {}
 #          grpc: 8502
 #    nomad:
 #      install: true
-#      manage_config: true
 #      config:
 #        server:
 #          enabled: true
 #          bootstrap_Expect: 1
+
+# Try to install even if OS is not supported
+force_install: false

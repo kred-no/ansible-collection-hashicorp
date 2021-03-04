@@ -1,4 +1,11 @@
 # CHANGELOG
+## 0.1.4 (Unreleased)
+#### GENERAL
+  * Changed to 'kred' namespace
+  * Moved cni-plugins to separate role
+  * Fixed 'ansible_os_family' check at start of playbooks.
+  * Added override variable to try installation even if OS not supported/recognized (force_install: true).
+
 ## 0.1.3 (2021-03-03)
 #### GENERAL
   * Added basic docker role (Debian/Ubuntu)

@@ -60,15 +60,4 @@
       cache_valid_time: 3600
   when: dns_merged['forward']
 
-# ===============================================
-
-- name: === CNI PACKAGE INSTALLATION ===
-  block:
-  - name: CNI | Add kernel tools
-    become: true
-    ansible.builtin.apt:
-      name: kmod
-      state: present
-      cache_valid_time: 300
-  when: cni_merged['install']
 ...

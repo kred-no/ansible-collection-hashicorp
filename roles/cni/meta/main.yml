@@ -1,0 +1,28 @@
+galaxy_info:
+  author: Rune Rønneseth
+  description: CNI plugins downloader/installer
+  company: Kreditorforeninges Driftssentral DA
+
+  license: GPL-3.0
+  min_ansible_version: 2.9
+
+  platforms:
+  - name: CentOS
+    versions:
+    - 8
+    - 7
+  - name: Ubuntu
+    versions:
+    - 20.04
+    - 18.04
+    - 16.04
+
+  galaxy_tags:
+  - cni
+  - network
+  - docker
+  - container
+  - nomad
+  - hashicorp
+
+dependencies: []

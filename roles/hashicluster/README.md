@@ -1,31 +1,30 @@
-Role Name
-=========
-
+# HASHICLUSTER
 Installation of HashiCorp Vault, Consul & Nomad
 
-Requirements
-------------
-
+## Requirements
 N/A
 
-Role Variables
---------------
-
+# Role Variables
 See 'vars/main.yml' & 'defaults/main.tf'
 
-Dependencies
-------------
-
+## Dependencies
 N/A
 
-Example Playbook
-----------------
+## Example Playbook
+> File: requirements.yml
+```yaml
+collections:
+- name: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster.git
+  type: git
+  version: development
+...
+```
 
+> File: playbook.yaml
 ```yaml
 # - Skip Vault installation.
 # - Install Consul (rolling latest version), w/custom configuration.
 # - Install Nomad (pinned version), w/custom configuration.
-# - Download CNI plugins (pinned version).
 # - Forward dns-queries on port 53 to consul on port 8600.
 ---
 - name: MoleculeConverge
@@ -33,13 +32,15 @@ Example Playbook
   gather_facts: true
 
   collections:
-  - 'kds_rune.hashicluster'
+  - 'kred.hashicluster'
 
   tasks:
-  - name: "Include roles"
+  - name: "Role: HashiCluster"
     include_role:
       name: hashicluster
     vars:
+      dns:
+        forward: true
       cluster:
         consul:
           install: true
@@ -67,13 +68,18 @@ Example Playbook
             server:
               enabled: true
               bootstrap_Expect: 1
-      cni:
-        install: true
-        version: '0.9.1'
-      dns:
-        forward: true
 ...
 ```
+
+> Execute playbook
+```bash
+# Install collection
+ansible-galaxy collection install -r requirements.yml
+
+# Run plays
+ansible-playbook playbook.yml --become
+```
+
 
 License
 -------
