@@ -1,9 +1,10 @@
 # Ansible Collection - kreditorforeningens_driftssentral_da.hashicluster
 
-**[Ansible Galaxy](https://galaxy.ansible.com/kred/hashicluster) | [GitHub](https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster)**
+**[Ansible Galaxy](https://galaxy.ansible.com/kred/hashicluster) | [GitHub](https://github.com/kred-no/ansible-collection-hashicorp)**
 
 ## DESCRIPTION
-Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
+
+Installation of HashiCorp Vault, Consul & Nomad from official repositories
 
   * Supports both pinned & latest versions.
   * Optional management of CNI-plugins.
@@ -11,18 +12,18 @@ Installation of HashiCorp Vault, Consul & Nomad vi aofficial repositories
   * Optional configuration of iptables forwarding (consul-dns). Only Debian/Ubuntu.
   * Optional System unit/service management.
 
-**KISS:** The primary goal is to keep the collection/roles/plays as clean, readable and requiring as little maintenance as possible.
+  **KISS:** The primary goal is to keep the collection/roles/plays as clean, readable and requiring as little maintenance as possible.
 
 ## EXAMPLE PLAYBOOK
+
 > File: requirements.yml
 ```yaml
 # Example for downloading directly from git
 ---
 collections:
-- name: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster.git
-  type: git
-  version: development
-...
+  - name: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster.git
+    type: git
+    version: development
 ```
 
 > File: playbook.yaml
@@ -35,60 +36,61 @@ collections:
 # - Forward dns-queries on port 53 to consul on port 8600.
 # - Install basic docker-role included in repo
 ---
-- name: MoleculeConverge
+- name: Converge
   hosts: all
   gather_facts: true
-
+  
   collections:
-  - 'kred.hashicluster'
-
+    - 'kred.hashicorp'
+  
   tasks:
-  - name: Install Docker
-    include_role:
-      name: docker
-
-  - name: Install CNI-Plugins
-    include_role:
-      name: cni
-    vars:
-      cni:
-        install: true
-        version: '0.9.1'
-
-  - name: Install Cluster applications
-    include_role:
-      name: hashicluster
-    vars:
-      dns:
-        forward: true
-      cluster:
-        consul:
+    -
+      name: Install Docker
+      include_role:
+        name: docker
+    -
+      name: Install CNI-Plugins
+      include_role:
+        name: cni
+      vars:
+        cni:
           install: true
-          config:
-            log_level: err
-            server: true
-            data_dir: /var/opt/consul
-            bootstrap_expect: 1
-            client_addr: "0.0.0.0"
-            ui: true
-            performance:
-              raft_multiplier: 10
-            recursors:
-            - 1.1.1.1
-            - 8.8.8.8
-            connect:
-              enabled: true
-            ports:
-              grpc: 8502
-        nomad:
-          install: true
-          version: '1.0.4'
-          service: { enabled: false }
-          config:
-            server:
-              enabled: true
-              bootstrap_Expect: 1
-...
+          version: '0.9.1'
+    -
+      name: Install Applications
+      include_role:
+        name: hashicorp
+      vars:
+        dns:
+          forward: true
+        cluster:
+          consul:
+            install: true
+            config:
+              log_level: err
+              server: true
+              data_dir: /var/opt/consul
+              bootstrap_expect: 1
+              client_addr: "0.0.0.0"
+              ui: true
+              performance:
+                raft_multiplier: 10
+              recursors:
+                - 1.1.1.1
+                - 8.8.8.8
+              connect:
+                enabled: true
+              ports:
+                grpc: 8502
+          nomad:
+            install: true
+            version: '1.0.4'
+            service:
+              enabled: false
+            config:
+              server:
+                enabled: true
+                bootstrap_expect: 1
 ```
 
 > Execute playbook
@@ -100,3 +102,7 @@ ansible-galaxy collection install -r requirements.yml
 ansible-playbook playbook.yml --become
 ```
 
+## OTHER RESOURCES
+
+  * https://code.visualstudio.com/docs/devcontainers/containers
+  * https://ansible.readthedocs.io/projects/molecule/getting-started-collections/

@@ -1,0 +1,6 @@
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Check if application is installed
+      ansible.builtin.command: echo "OK"
+      changed_when: false

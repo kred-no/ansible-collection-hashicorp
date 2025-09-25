@@ -1,0 +1,14 @@
+FROM docker.io/ubuntu:latest
+
+USER root
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    container=podman
+
+RUN set -e \
+  && apt-get update \
+  && apt-get -y install python3 sudo dumb-init \
+  && apt-get clean
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["sleep", "1d"]

@@ -1,39 +1,13 @@
 # CHANGELOG
-## 0.1.5 (2021-03-04)
-#### GENERAL
-  * Fixed CRLF -> LF ..
-#### CNI
-  * New task for adding kernel modules (br_netfilter)
 
-## 0.1.4 (2021-03-04)
-#### GENERAL
-  * Changed to 'kred' namespace
-  * Moved cni-plugins to separate role
-  * Fixed 'ansible_os_family' check at start of playbooks.
-  * Added override variable to try installation even if OS not supported/recognized (force_install: true).
+  <!-- Maintainers -->
+  [RR]: mailto:rune.ronneseth@kred.no
+  <!-- Maintainers -->
 
-## 0.1.3 (2021-03-03)
-#### GENERAL
-  * Added basic docker role (Debian/Ubuntu)
+## [UNRELEASED]
 
-## 0.1.2 (2021-03-03)
-#### GENERAL
-  * Added service-templates, since the defaults use .hcl & validate its existence
-  * Enforce custom configfile & servicefile. It's just easier this way..
+#### Improvements
 
-## 0.1.1 (2021-03-02)
-#### GENERAL
-  * Updated supported OS-matrix
-  * Added extra info (collections + python-req.) to examples
-
-## 0.1.0 (2021-03-01)
-#### GENERAL
-  * Uses HashiCorp official package repositories.
-  * Support for Debian (apt) & RedHat (yum) distributions.
-  * Support for Vault, Consul & Nomad (versioned & latest) installations.
-  * Optional support for managing configurationfiles (streaming yaml -> json). See examples.
-  * Molecule for testing.
-#### NOMAD
-  * Support for installing CNI-plugins.
-#### CONSUL
-  * Support for configuring dns-forwarding via iptables (Debian).
+  * Refactored all included ansible roles in collection - [RR]
+  * Added Molecule testing (complete rewrite, using ansible-native) - [RR]
+  * Added devcontainer for use with VSCode - [RR]

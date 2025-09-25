@@ -3,11 +3,11 @@
 # variable, without the '_' prefix
 ---
 # CNI installation (Nomad/Consul bridged networking)
-_cni:
-  install: false
-  version: '0.9.1'
-  bin_folder: /opt/cni/bin
+cni_config_defaults:
+  install: true
+  version: '1.3.0'
+  folder: /opt/cni
   template_folder: /etc/cni/net.d
   owner: root
   group: root
-cni_merged: "{{_cni|combine(cni, recursive=true)}}"
+cni_config_merged: "{{ cni_config_defaults | combine(cni_config, recursive=true) }}"

@@ -1,0 +1,54 @@
+-
+  name: Converge HashiCluster (AIO)
+  hosts: molecule
+  gather_facts: true
+
+  roles:
+    - role: kred.hashicluster.cni
+      vars:
+        cni:
+          install: true
+          version: '1.3.0'
+    - role: kred.hashicluster.hashicluster
+      vars:
+        dns:
+          forward: true
+        cluster:
+          consul:
+            install: true
+            config:
+              log_level: err
+              server: true
+              data_dir: /var/opt/consul
+              bootstrap_expect: 1
+              client_addr: "0.0.0.0"
+              performance:
+                raft_multiplier: 10
+              recursors:
+                - 1.1.1.1
+                - 8.8.8.8
+              connect:
+                enabled: true
+              ports:
+                grpc: 8502
+              ui_config:
+                enabled: true
+          nomad:
+            install: true
+            config:
+              server:
+                enabled: true
+                bootstrap_expect: 1
+
+  tasks:
+    -
+      name: Read OS release information
+      ansible.builtin.slurp:
+        src: /etc/os-release
+      register: os_release
+    -
+      name: Write OS info to file
+      ansible.builtin.copy:
+        content: "{{ os_release.content | b64decode }}"
+        dest: /tmp/molecule_os_info.txt
+        mode: "0644"

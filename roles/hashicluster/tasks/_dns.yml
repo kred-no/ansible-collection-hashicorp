@@ -1,36 +1,31 @@
-# Modules:
-# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html
-# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/iptables_module.html
----
-
-- name: DNS | Enable forwarding (PREROUTING)
+-
+  name: DNS | Enable forwarding (PREROUTING)
   become: true
   ansible.builtin.iptables:
     table: nat
     chain: PREROUTING
-    protocol: "{{item}}"
-    match: "{{item}}"
+    protocol: "{{ item }}"
+    match: "{{ item }}"
     destination_port: '53'
     jump: REDIRECT
-    to_ports: "{{dns_merged['target_port']}}"
-    comment: "[HashiCluster] DNS rule ({{item}})"
+    to_ports: "{{ hashicluster_dns_merged['target_port'] }}"
+    comment: "[HashiCluster] DNS rule ({{ item }})"
   loop:
-  - tcp
-  - udp
-
-- name: DNS | Enable forwarding (OUTPUT)
+    - tcp
+    - udp
+-
+  name: DNS | Enable forwarding (OUTPUT)
   become: true
   ansible.builtin.iptables:
     table: nat
     chain: OUTPUT
-    protocol: "{{item}}"
-    match: "{{item}}"
+    protocol: "{{ item }}"
+    match: "{{ item }}"
     destination: localhost
     destination_port: '53'
     jump: REDIRECT
-    to_ports: "{{dns_merged['target_port']}}"
-    comment: "[HashiCluster] DNS rule ({{item}})"
+    to_ports: "{{ hashicluster_dns_merged['target_port'] }}"
+    comment: "[HashiCluster] DNS rule ({{ item }})"
   loop:
-  - tcp
-  - udp
-...
+    - tcp
+    - udp

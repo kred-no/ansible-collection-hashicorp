@@ -1,0 +1,10 @@
+FROM docker.io/fedora:latest
+
+USER root
+
+RUN set -e \
+  && dnf install -y python3 sudo dumb-init \
+  && dnf clean all
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD ["sleep", "1d"]

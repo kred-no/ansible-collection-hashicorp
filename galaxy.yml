@@ -1,24 +1,28 @@
 namespace: kred
-name: hashicluster
-version: 0.1.5
-description: HashiCluster deployment (consul, vault, nomad)
+name: hashicorp
+version: 1.0.0
+
+description: HashiCorp Application Deployments
+authors: ["Rune Rønneseth <rune.ronneseth@kred.no>"]
+
 readme: README.md
-authors:
-- Rune Rønneseth <rune.ronneseth@kred.no>
 license_file: LICENSE
 dependencies: {}
-repository: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
-documentation: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
-homepage: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster
-issues: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster/issues
+
+repository: https://github.com/kred-no/ansible-collection-hashicorp
+documentation: https://github.com/kred-no/ansible-collection-hashicorp
+homepage: https://github.com/kred-no/ansible-collection-hashicorp
+issues: https://github.com/kred-no/ansible-collection-hashicorp/issues
+
 build_ignore:
-- molecule
-- tests
+  - extensions
+  - molecule
+  - tests
+
 tags:
-- hashicorp
-- vault
-- consul
-- nomad
-- docker
-- cni
-- cluster
+  - cni
+  - consul
+  - docker
+  - hashicorp
+  - nomad
+  - vault

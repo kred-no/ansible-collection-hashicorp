@@ -1,35 +1,32 @@
-# Modules:
-# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_module.html
----
-- name: === SYSTEMD DEFINITIONS ===
-  block:
-  - name: SERVICE | Update service definition
-    become: true
-    ansible.builtin.template:
-      src: "{{item['key']}}.service.j2"
-      dest: "/lib/systemd/system/{{item['key']}}.service"
-      mode: '0644'
-    notify:
-    - systemd_reload_config
-    - "systemd_restart_{{item['key']}}"
-    loop: "{{query('dict', cluster_merged)}}"
-    loop_control:
-      label: "Update {{item['key']}} unit-file"
+-
+  name: SYSTEMD DEFINITIONS
   when: item.value['install']
-
-- name: === SYSTEMD SERVICES ===
   block:
-  - name: SERVICE | Update HashiCorp Service(s)
-    become: true
-    ansible.builtin.systemd:
-      name: "{{item['key']}}"
-      enabled: "{{item.value.service['enabled']}}"
-      masked: "{{item.value.service['masked']}}"
-    notify:
-    - systemd_reload_config
-    - "systemd_restart_{{item['key']}}"
-    loop: "{{query('dict', cluster_merged)}}"
-    loop_control:
-      label: "Service {{item['key']}} state: {{item.value.service['enabled']}}"
+    - name: SERVICE | Update service definition
+      become: true
+      ansible.builtin.template:
+        src: "{{ item['key'] }}.service.j2"
+        dest: "/etc/systemd/system/{{ item['key'] }}.service" # overrides files in /lib/systemd/system
+        mode: '0644'
+      notify:
+        - SystemdReload
+        - "SystemdRestart {{ item['key'] }}"
+      loop: "{{ query('dict', hashicluster_role_merged) }}"
+      loop_control:
+        label: "Update {{ item['key'] }} unit-file"
+-
+  name: SYSTEMD SERVICES
   when: item.value['install']
-...
+  block:
+    - name: SERVICE | Update HashiCorp Service(s)
+      become: true
+      ansible.builtin.systemd:
+        name: "{{ item['key'] }}"
+        enabled: "{{ item.value.service['enabled'] }}"
+        masked: "{{ item.value.service['masked'] }}"
+      notify:
+        - SystemdReload
+        - "SystemdRestart {{ item['key'] }}"
+      loop: "{{ query('dict', hashicluster_role_merged) }}"
+      loop_control:
+        label: "Service {{ item['key'] }} state: {{ item.value.service['enabled'] }}"

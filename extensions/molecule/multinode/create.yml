@@ -1,0 +1,49 @@
+-
+  name: Create container instances
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    -
+      name: Build Container Images
+      containers.podman.podman_image:
+        name: local/{{ item }}:molecule
+        state: present
+        path: "{{ playbook_dir }}/"
+        build:
+          format: docker
+          file: "{{ playbook_dir }}/Dockerfile.{{ item }}"
+      loop:
+        - ubuntu
+    -
+      name: Create Containers (server)
+      containers.podman.podman_container:
+        image: "{{ hostvars[item]['container_image'] }}"
+        name: "{{ item }}"
+        hostname: "{{ item }}"
+        command: sleep 1d
+        privileged: true # Required for iptables update
+        systemd: true
+        log_driver: json-file
+        state: started
+      register: result
+      loop: "{{ groups['server'] }}"
+    -
+      name: Create Containers (client)
+      containers.podman.podman_container:
+        image: "{{ hostvars[item]['container_image'] }}"
+        name: "{{ item }}"
+        hostname: "{{ item }}"
+        command: sleep 1d
+        privileged: true # Required for iptables update
+        systemd: true
+        log_driver: json-file
+        state: started
+      register: result
+      loop: "{{ groups['client'] }}"
+    -
+      name: Wait for container to be ready
+      ansible.builtin.wait_for_connection:
+        timeout: 30
+      delegate_to: "{{ item }}"
+      loop: "{{ groups['molecule'] }}"

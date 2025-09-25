@@ -1,0 +1,13 @@
+-
+  name: Destroy container
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    -
+      name: Kill container if running
+      containers.podman.podman_container:
+        name: "{{ item }}"
+        state: absent
+        timeout: 5
+      loop: "{{ groups['molecule'] }}"

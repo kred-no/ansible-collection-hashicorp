@@ -1,4 +1,5 @@
 # CNI
+
 Installation of CNI plugins: [GitHub]("https://github.com/containernetworking/plugins")
 
 ## Requirements
@@ -34,7 +35,6 @@ N/A
         version: '0.9.1'
         owner: hashicorp
         group: hashicorp
-...
 ```
 
 License

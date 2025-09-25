@@ -1,19 +1,21 @@
+{{ ansible_managed | comment }}
+
 [Unit]
-Description="HashiCorp Consul - A service mesh solution"
-Documentation=https://www.consul.io/
-Requires=network-online.target
-After=network-online.target
-ConditionDirectoryNotEmpty=/etc/consul.d/
+  Description="HashiCorp Consul - A service mesh solution"
+  Documentation=https://www.consul.io/
+  Requires=network-online.target
+  After=network-online.target
+  ConditionDirectoryNotEmpty=/etc/consul.d/
 
 [Service]
-User={{cluster_merged.consul.service['user']|default('root')}}
-Group={{cluster_merged.consul.service['user']|default('root')}}
-ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d/
-ExecReload=/bin/kill --signal HUP $MAINPID
-KillMode=process
-KillSignal=SIGTERM
-Restart=on-failure
-LimitNOFILE=65536
+  User={{ hashicluster_role_merged.consul.service['user'] | default('root') }}
+  Group={{hashicluster_role_merged.consul.service['user'] | default('root') }}
+  ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d/
+  ExecReload=/bin/kill --signal HUP $MAINPID
+  KillMode=process
+  KillSignal=SIGTERM
+  Restart=on-failure
+  LimitNOFILE=65536
 
 [Install]
-WantedBy=multi-user.target
+  WantedBy=multi-user.target

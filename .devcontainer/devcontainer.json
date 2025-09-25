@@ -1,0 +1,25 @@
+{
+  "name": "vscode_ansible-hashicorp-collection",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "runArgs": [
+    "--privileged"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/git:latest": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-containers",
+        "redhat.vscode-yaml",
+        "redhat.ansible",
+        "GitHub.copilot-chat"
+      ]
+    }
+  },
+  "remoteUser": "vscode",
+  "postCreateCommand": ".devcontainer/scripts/post-create.sh"
+}

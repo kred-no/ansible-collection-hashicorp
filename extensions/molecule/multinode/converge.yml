@@ -1,0 +1,51 @@
+## Molecule uses galaxy.yml in root folder for detecting roles
+#
+## Note: This is not recommendeded, but possible
+#  collections:
+#    - kred.hashicorp
+#  roles:
+#    - role: cni
+#    - role: hashicluster
+#
+---
+-
+  name: HashiCluster Servers
+  hosts: server
+  gather_facts: true
+
+  roles: 
+    - role: kred.hashicorp.hashicluster
+
+  tasks:
+    -
+      name: Read OS release information
+      ansible.builtin.slurp:
+        src: /etc/os-release
+      register: os_release
+    -
+      name: Write OS info to file
+      ansible.builtin.copy:
+        content: "{{ os_release.content | b64decode }}"
+        dest: /tmp/molecule_os_info.txt
+        mode: "0644"
+-
+  name: HashiCluster Clients
+  hosts: client
+  gather_facts: true
+  
+  roles:
+    - role: kred.hashicorp.cni
+    - role: kred.hashicorp.hashicluster
+
+  tasks:
+    -
+      name: Read OS release information
+      ansible.builtin.slurp:
+        src: /etc/os-release
+      register: os_release
+    -
+      name: Write OS info to file
+      ansible.builtin.copy:
+        content: "{{ os_release.content | b64decode }}"
+        dest: /tmp/molecule_os_info.txt
+        mode: "0644"

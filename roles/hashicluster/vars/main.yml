@@ -1,9 +1,7 @@
 # Configuration defaults.
-# Override these by setting the corresponding named
-# variable, without the '_' prefix
 ---
-# HashiCorp Cluster applications settings
-_cluster:
+# Defaults: HashiCorp applications settings
+hashicluster_role_defaults:
   vault:
     install: false
     version: latest
@@ -28,10 +26,12 @@ _cluster:
       masked: false
       user: root
     config: {}
-cluster_merged: "{{_cluster|combine(cluster, recursive=true)}}"
 
-# DNS forwarding via iptables
-_dns:
+# Defaults: DNS forwarding via iptables
+hashicluster_dns_defaults:
   forward: false
   target_port: '8600'
-dns_merged: "{{_dns|combine(dns, recursive=true)}}"
+
+# Combine defaults with overrides, for use in role tasks
+hashicluster_role_merged: "{{ hashicluster_role_defaults | combine(hashicluster_role, recursive=true) }}"
+hashicluster_dns_merged: "{{ hashicluster_dns_defaults | combine(hashicluster_dns, recursive=true) }}"

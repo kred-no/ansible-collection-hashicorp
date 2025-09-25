@@ -1,0 +1,24 @@
+- name: Verify
+  hosts: molecule
+  become: false
+  gather_facts: false
+
+  tasks:
+    -
+      name: Check Nomad Version
+      ansible.builtin.command: "nomad version"
+      register: nomad_output
+      changed_when: false
+    -
+      name: Print Nomad Version
+      ansible.builtin.debug:
+        msg: "{{ nomad_output.stdout | regex_search('Nomad v([0-9.]+)', '\\1') }}"
+    -
+      name: Check Consul Version
+      ansible.builtin.command: "consul version --format=json"
+      register: consul_output
+      changed_when: false
+    -
+      name: Print Consul Version
+      ansible.builtin.debug:
+        msg: "{{ (consul_output.stdout | from_json).Version }}"

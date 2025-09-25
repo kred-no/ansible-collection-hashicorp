@@ -1,14 +1,10 @@
-# Modules:
-# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_module.html
----
 - name: SYSTEMD | Start service
   become: true
   ansible.builtin.systemd:
     name: docker
-    state: "{{service_state|default('started')}}"
+    state: "{{ docker_service_state | default('started') }}"
     enabled: true
     masked: false
   notify:
-  - systemd_reload
-  - systemd_restart
-...
+    - systemd_reload
+    - systemd_restart

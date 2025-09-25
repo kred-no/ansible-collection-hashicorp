@@ -1,4 +1,11 @@
+# Folders
+**/.ansible/*
+**/legacy/*
+
+# Files
+*.backup
 *.secret
+*.tar.gz
+
 secret.*
 
-*.tar.gz

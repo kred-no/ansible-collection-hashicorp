@@ -1,0 +1,28 @@
+- name: Installer Config File
+  block:
+    - name: CONFIG | Remove default configuration
+      become: true
+      ansible.builtin.file:
+        path: "/etc/{{item['key']}}.d/{{item['key']}}.hcl"
+        state: absent
+      loop: "{{ query('dict', hashicluster_role_merged) }}"
+      loop_control:
+        label: "Remove default {{ item['key'] }} configuration"
+      when: item.value['install']
+-
+  name: Role Config File
+  block:
+    - name: CONFIG | Update custom configuration
+      become: true
+      ansible.builtin.copy:
+        content: "{{ item.value['config'] | default('') | to_nice_json }}"
+        dest: "/etc/{{ item['key'] }}.d/{{item['key'] }}.json"
+        owner: "root"
+        group: "root"
+        mode: 0644
+      notify:
+        - "SystemdRestart {{ item['key'] }}"
+      loop: "{{ query('dict', hashicluster_role_merged) }}"
+      loop_control:
+        label: "Modify /etc/{{ item['key'] }}.d/{{ item['key'] }}.json"
+      when: item.value['install']

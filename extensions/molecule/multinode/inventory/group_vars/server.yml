@@ -1,0 +1,43 @@
+docker_service_state: stopped
+
+#cni_config:
+#  install: true
+#  version: '1.0.0'
+
+hashicluster_dns:
+  forward: true # NOTE: Requires --privileged container
+
+hashicluster_role:
+  
+  consul:
+    install: true
+    service:
+      enabled: false
+    config:
+      datacenter: dev-dc1
+      log_level: err
+      server: true
+      data_dir: /opt/consul
+      bootstrap_expect: 1
+      client_addr: "0.0.0.0"
+      performance:
+        raft_multiplier: 10
+      recursors:
+        - 1.1.1.1
+        - 8.8.4.4
+      connect:
+        enabled: true
+      ports:
+        grpc: 8502
+      ui_config:
+        enabled: true
+
+  nomad:
+    install: true
+    service:
+      enabled: false
+    config:
+      datacenter: dev-dc1
+      server:
+        enabled: true
+        bootstrap_expect: 1

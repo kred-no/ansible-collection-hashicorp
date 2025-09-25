@@ -1,4 +1,5 @@
 # HASHICLUSTER
+
 Installation of HashiCorp Vault, Consul & Nomad
 
 ## Requirements
@@ -14,10 +15,9 @@ N/A
 > File: requirements.yml
 ```yaml
 collections:
-- name: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster.git
-  type: git
-  version: development
-...
+  - name: https://github.com/kred-no/ansible-collection-hashicorp.git
+    type: git
+    version: development
 ```
 
 > File: playbook.yaml
@@ -32,43 +32,43 @@ collections:
   gather_facts: true
 
   collections:
-  - 'kred.hashicluster'
+    - 'kred.hashicluster'
 
   tasks:
-  - name: "Role: HashiCluster"
-    include_role:
-      name: hashicluster
-    vars:
-      dns:
-        forward: true
-      cluster:
-        consul:
-          install: true
-          config:
-            log_level: err
-            server: true
-            data_dir: /var/opt/consul
-            bootstrap_expect: 1
-            client_addr: "0.0.0.0"
-            ui: true
-            performance:
-              raft_multiplier: 10
-            recursors:
-            - 1.1.1.1
-            - 8.8.8.8
-            connect:
-              enabled: true
-            ports:
-              grpc: 8502
-        nomad:
-          install: true
-          version: '1.0.4'
-          service: { enabled: false }
-          config:
-            server:
-              enabled: true
-              bootstrap_Expect: 1
-...
+    - name: "Role: HashiCorp"
+      include_role:
+        name: hashicluster
+      vars:
+        dns:
+          forward: true
+        cluster:
+          consul:
+            install: true
+            config:
+              log_level: err
+              server: true
+              data_dir: /var/opt/consul
+              bootstrap_expect: 1
+              client_addr: "0.0.0.0"
+              ui: true
+              performance:
+                raft_multiplier: 10
+              recursors:
+                - 1.1.1.1
+                - 8.8.8.8
+              connect:
+                enabled: true
+              ports:
+                grpc: 8502
+          nomad:
+            install: true
+            version: '1.0.4'
+            service:
+              enabled: false
+            config:
+              server:
+                enabled: true
+                bootstrap_expect: 1
 ```
 
 > Execute playbook

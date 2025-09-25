@@ -1,25 +1,45 @@
+{{ ansible_managed | comment }}
+
 [Unit]
-Description=Nomad
-Documentation=https://nomadproject.io/docs/
-Wants=network-online.target
-After=network-online.target
-ConditionDirectoryNotEmpty=/etc/nomad.d/
+  Description=Nomad
+  Documentation=https://nomadproject.io/docs/
+  Wants=network-online.target
+  After=network-online.target
+  ConditionDirectoryNotEmpty=/etc/nomad.d/
 
 [Service]
-User={{cluster_merged.nomad.service['user']|default('root')}}
-Group={{cluster_merged.nomad.service['user']|default('root')}}
-ExecReload=/bin/kill -HUP $MAINPID
-ExecStart=/usr/bin/nomad agent -config /etc/nomad.d
-KillMode=process
-KillSignal=SIGINT
-LimitNOFILE=65536
-LimitNPROC=infinity
-Restart=on-failure
-RestartSec=2
-StartLimitBurst=3
-StartLimitInterval=10
-TasksMax=infinity
-OOMScoreAdjust=-1000
+  # Server should run as 'nomad' user & clients should run as 'root'
+  User={{ hashicluster_role_merged.nomad.service['user'] | default('root') }}
+  Group={{ hashicluster_role_merged.nomad.service['user'] | default('root') }}
+  
+  ExecReload=/bin/kill -HUP $MAINPID
+  ExecStart=/usr/bin/nomad agent -config /etc/nomad.d
+  
+  KillMode=process
+  KillSignal=SIGINT
+  LimitNOFILE=65536
+  LimitNPROC=infinity
+  Restart=on-failure
+  RestartSec=2
+  
+  ## Configure unit start rate limiting. Units which are started more than
+  ## *burst* times within an *interval* time span are not permitted to start any
+  ## more. Use `StartLimitIntervalSec` or `StartLimitInterval` (depending on
+  ## systemd version) to configure the checking interval and `StartLimitBurst`
+  ## to configure how many starts per interval are allowed. The values in the
+  ## commented lines are defaults.
+  # StartLimitBurst = 5
+
+  {% if (ansible_facts['systemd_version'] | default(0) | int) >= 230 %}
+  ## StartLimitIntervalSec is used for systemd versions >= 230
+  StartLimitIntervalSec=10s
+  {% else %}
+  ## StartLimitInterval is used for systemd versions < 230
+  StartLimitInterval=10s
+  {% endif %}
+
+  TasksMax=infinity
+  OOMScoreAdjust=-1000
 
 [Install]
-WantedBy=multi-user.target
+  WantedBy=multi-user.target

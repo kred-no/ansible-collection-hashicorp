@@ -1,7 +1,7 @@
 ---
 # defaults file for docker
-repo_branch: stable
-service_state: started
+docker_repo_branch: stable
+docker_service_state: started
 
 # Try to install even if OS is not supported
-force_install: false
+docker_force_install: false

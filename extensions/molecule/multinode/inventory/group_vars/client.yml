@@ -1,0 +1,71 @@
+# Role: CNI
+cni_config:
+  install: true
+  version: '1.3.0'
+
+
+# Role: HashiCluster
+hashicluster_dns:
+  forward: true
+
+hashicluster_role:
+  
+  consul:
+    install: true
+    service:
+      enabled: false
+    config:
+      data_dir: /opt/consul
+      datacenter: dev-dc1
+      log_level: err
+      retry_join:
+        - mlc-server-1
+      bind_addr: '0.0.0.0'
+      client_addr: '0.0.0.0'
+      ui_config:
+        enabled: false
+      recursors:
+        - 1.1.1.1
+        - 8.8.4.4
+      connect:
+        enabled: true
+      ports:
+        grpc: 8502
+      acl:
+        enabled: false
+      telemetry:
+        prometheus_retention_time: 120s
+  
+  nomad:
+    install: true
+    service:
+      enabled: false
+    config:
+      data_dir: /opt/nomad
+      datacenter: dev-dc1
+      client:
+        enabled: true
+        reserved:
+          cpu: 250
+          memory: 512
+          disk: 1000
+      host_volume:
+        ca-certificates:
+          path: /etc/ssl/certs
+          read_only: true
+      acl:
+        enabled: false
+      #plugin:
+      #  docker:
+      #    config:
+      #      allow_privileged: true
+      #      volumes:
+      #        enabled: true
+      telemetry:
+        prometheus_metrics: true
+        collection_interval: "10s"
+        publis_allocation_metrics: true
+        publish_node_metrics: true
+  
+  vault:
+    install: false

@@ -1,0 +1,29 @@
+ansible:
+  cfg:
+    defaults:
+      deprecation_warnings: false
+  executor:
+    args:
+      ansible_playbook:
+        - --inventory=inventory/
+
+dependency:
+  name: galaxy
+  options:
+    requirements-file: ${MOLECULE_SCENARIO_DIRECTORY}/requirements.yml
+
+scenario:
+  test_sequence:
+    - destroy
+    - create
+    - converge
+    - destroy
+
+provisioner:
+  name: ansible
+  playbooks:
+    #converge: ../../playbook.yml
+    converge: converge.yml
+
+# Default scenario is shared
+shared_state: true

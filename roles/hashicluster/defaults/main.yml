@@ -1,15 +1,16 @@
-# APPLICATION OVERRIDE VALUES
+# Override Values
 # See 'vars' for default values
 ---
-cluster: {}
-dns: {}
+hashicluster_role: {}
+hashicluster_dns: {}
 
 # ===========================
 # EXAMPLE CONFIG
 # ===========================
-#  dns:
+#  hashicluster_dns:
 #    forward: true
-#  cluster:
+#
+#  hashicluster_role:
 #    consul:
 #      install: true
 #      config:
@@ -36,4 +37,4 @@ dns: {}
 #          bootstrap_Expect: 1
 
 # Try to install even if OS is not supported
-force_install: false
+hashicluster_force_install: false

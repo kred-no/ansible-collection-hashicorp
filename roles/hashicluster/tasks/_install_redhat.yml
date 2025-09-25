@@ -1,55 +1,48 @@
-# Modules:
-# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html
-# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_repository module.html
----
-- name: === REPOSITORY INSTALLATION ===
+-
+  name: RedHat Installation
   block:
-
-  - name: INSTALL | Role requirement(s)
-    become: true
-    ansible.builtin.yum:
-      name:
-      - gpg
-      - yum-utils
-      state: present
-
-  - name: INSTALL | Add HashiCorp repository
-    become: true
-    ansible.builtin.yum_repository:
-      name: hashicorp
-      description: HashiCorp YUM repository
-      baseurl: https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable
-      gpgkey: https://rpm.releases.hashicorp.com/gpg
-      state: present
-      enabled: true
-
-  - name: INSTALL | Add HashiCorp applications
-    become: true
-    ansible.builtin.yum:
-      update_cache: true
-      name: >-
-        {%- if item.value['version'] == 'latest' -%}
-        {{item['key']}}
-        {%- else -%}
-        {{item['key']}}-{{item.value['version']}}
-        {%- endif -%}
-      state: >-
-        {%- if item.value['install'] -%}present
-        {%- else -%}absent
-        {%- endif -%}
-    loop: "{{query('dict', cluster_merged)}}"
-    loop_control:
-      label: "{{item['key']}}={{item.value['version']}} (install: {{item.value['install']}})"
-
-# ===============================================
-
-  # Replace with firewalld settings
-- name: === DNS PACKAGE INSTALLATION ===
+    -
+      name: INSTALL | Role requirement(s)
+      become: true
+      ansible.builtin.yum:
+        name:
+          - gpg
+          - yum-utils
+        state: present
+    -
+      name: INSTALL | Add HashiCorp repository
+      become: true
+      ansible.builtin.yum_repository:
+        name: hashicorp
+        description: HashiCorp YUM repository
+        baseurl: https://rpm.releases.hashicorp.com/RHEL/$releasever/$basearch/stable
+        gpgkey: https://rpm.releases.hashicorp.com/gpg
+        state: present
+        enabled: true
+    -
+      name: INSTALL | Add HashiCorp applications
+      become: true
+      ansible.builtin.yum:
+        update_cache: true
+        name: >-
+          {%- if item.value['version'] == 'latest' -%}
+          {{item['key']}}
+          {%- else -%}
+          {{item['key']}}-{{item.value['version']}}
+          {%- endif -%}
+        state: >-
+          {%- if item.value['install'] -%}present
+          {%- else -%}absent
+          {%- endif -%}
+      loop: "{{ query('dict', hashicluster_role_merged) }}"
+      loop_control:
+        label: "{{ item['key'] }}={{ item.value['version'] }} (install: {{ item.value['install'] }})"
+-
+  name: Iptables Installation (DNS)
   block:
-  - name: DNS | IP-Tables requirement(s)
-    become: true
-    ansible.builtin.yum:
-      name: iptables-services
-      state: present
-  when: dns_merged['forward']
-...
+    - name: DNS | IP-Tables requirement(s)
+      become: true
+      ansible.builtin.yum:
+        name: iptables-services
+        state: present
+  when: hashicluster_dns_merged['forward']

@@ -1,25 +1,15 @@
 galaxy_info:
+  description: IBM/HashiCorp Installation (Vault, Consul, Nomad)
+  company: Kreditorforeningen SA
   author: Rune Rønneseth
-  description: HashiCluster (Vault, Consul, Nomad)
-  company: Kreditorforeninges Driftssentral DA
 
   license: GPL-3.0
-  min_ansible_version: 2.9
-
-  platforms:
-  - name: CentOS
-    versions:
-    - 8
-  - name: Ubuntu
-    versions:
-    - 20.04
-    - 18.04
+  min_ansible_version: '2.9'
 
   galaxy_tags:
-  - vault
-  - consul
-  - nomad
-  - hashicorp
-  - cluster
+    - hashicorp
+    - consul
+    - nomad
+    - vault
 
 dependencies: []

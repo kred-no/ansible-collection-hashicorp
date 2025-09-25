@@ -1,0 +1,17 @@
+-
+  name: Cleanup Resources
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    -
+      name: Remove Container Images
+      containers.podman.podman_image:
+        name: local/{{ item }}:molecule
+        state: absent
+        path: "{{ playbook_dir }}/"
+        build:
+          format: docker
+          file: "{{ playbook_dir }}/Dockerfile.{{ item }}"
+      loop:
+        - ubuntu

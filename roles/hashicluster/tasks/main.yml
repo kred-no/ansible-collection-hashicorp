@@ -1,31 +1,33 @@
-# Modules:
-# - https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_tasks_module.html
----
-- name: === UNSUPPORTED OS FAMILY ===
+-
+  name: Validation
+  when: # Stop the play if OS is NOT Debian or RedHat, unless 'force_install' is true
+    -
+      ansible_os_family | lower not in ['debian', 'redhat']
+    -
+      not (force_install | default(false))
   block:
-  - debug:
-      msg: "{{ansible_os_family}} is not supported"
-  - meta: end_play
+    -
+      name: OS Family Validation
+      ansible.builtin.debug:
+        msg: "{{ ansible_os_family }} is not supported"
+    -
+      name: OS Family Validation Failed
+      ansible.builtin.meta: end_play
+-
+  name: Application installation
+  ansible.builtin.include_tasks: "_install_{{ ansible_os_family | lower }}.yml"
+-
+  name: Application configuration
+  ansible.builtin.include_tasks: _settings.yml
+-
+  name: IP-tables forwarding (dns)
+  ansible.builtin.include_tasks: _dns.yml
   when:
-  - ansible_os_family|lower != 'debian'
-  - ansible_os_family|lower != 'redhat'
-  - not force_install|default(false)
-
-- name: Manage application installation
-  include_tasks: "_install_{{ansible_os_family|lower}}.yml"
-
-- name: Manage application configuration
-  include_tasks: _config.yml
-
-- name: Manage iptables forwarding (dns)
-  include_tasks: _dns.yml
-  when: # list means 'AND' between conditions
-  - dns_merged['forward']
-
-- name: Manage systemd unit/services
-  include_tasks: _systemd.yml
+    - hashicluster_dns_merged['forward']
+-
+  name: Systemd unit/services
+  ansible.builtin.include_tasks: _systemd.yml
   when: ansible_service_mgr == 'systemd'
-
-- name: Flush all handlers
+-
+  name: Flush handlers
   ansible.builtin.meta: flush_handlers
-...

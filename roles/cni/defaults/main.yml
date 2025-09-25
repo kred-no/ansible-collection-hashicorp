@@ -6,7 +6,7 @@
 # ===========================
 #  cni:
 #    install: true
-cni: {}
+cni_config: {}
 
 # Try to install even if OS is not supported
-force_install: false
+cni_force_install: false
