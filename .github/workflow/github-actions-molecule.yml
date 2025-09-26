@@ -1,0 +1,38 @@
+name: Molecule Test
+on:
+  workflow_dispatch:
+#defaults:
+#  run:
+#    working-directory: './'
+
+jobs:
+  molecule-podman:
+    runs-on: ubuntu-latest
+    #strategy:
+    #  matrix:
+    #    distro:
+    #      - ubuntu2404
+    steps:
+      -
+        name: Checkout code
+        uses: actions/checkout@v5
+      -
+        name: Set up Python3
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+      -
+        name: Install Required Packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman
+          sudo apt-get autoclean
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade ansible-dev-tools
+          python3 -m pip install --upgrade molecule-podman
+          ansible-galaxy collection install ansible.posix
+          ansible-galaxy collection install community.general
+          ansible-galaxy collection install containers.podman
+      -
+        name: Run Molecule Tests
+        run: molecule test -s multinode
