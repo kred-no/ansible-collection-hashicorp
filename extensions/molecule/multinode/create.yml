@@ -2,6 +2,7 @@
   name: Create container instances
   hosts: localhost
   gather_facts: false
+  #become: true
 
   tasks:
     -
@@ -15,13 +16,18 @@
           file: "{{ playbook_dir }}/Dockerfile.{{ item }}"
       loop:
         - ubuntu
+    - name: Create network (dns resolution)
+      containers.podman.podman_network:
+        name: molecule_network
+        state: present
     -
-      name: Create Containers (server)
+      name: Create Containers (Server)
       containers.podman.podman_container:
         image: "{{ hostvars[item]['container_image'] }}"
         name: "{{ item }}"
         hostname: "{{ item }}"
-        command: sleep 1d
+        network: molecule_network
+        command: ["supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"] #sleep 1d
         privileged: true # Required for iptables update
         systemd: true
         log_driver: json-file
@@ -29,16 +35,19 @@
       register: result
       loop: "{{ groups['server'] }}"
     -
-      name: Create Containers (client)
+      name: Create Containers (Client)
       containers.podman.podman_container:
         image: "{{ hostvars[item]['container_image'] }}"
         name: "{{ item }}"
         hostname: "{{ item }}"
-        command: sleep 1d
+        network: molecule_network
+        command: ["supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"] #sleep 1d
         privileged: true # Required for iptables update
         systemd: true
         log_driver: json-file
         state: started
+        volumes:
+          - "/sys/fs/cgroup:/sys/fs/cgroup:rw"
       register: result
       loop: "{{ groups['client'] }}"
     -

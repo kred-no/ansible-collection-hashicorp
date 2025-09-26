@@ -1,0 +1,10 @@
+-
+  name: Validation
+  ansible.builtin.include_tasks: _validate.yml
+-
+  name: Installation (pip)
+  when: supervisor_install | bool
+  ansible.builtin.include_tasks: _install.yml
+-
+  name: Configuration
+  ansible.builtin.include_tasks: _supervisord.yml

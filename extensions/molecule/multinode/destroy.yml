@@ -2,12 +2,25 @@
   name: Destroy container
   hosts: localhost
   gather_facts: false
+  #become: true
 
   tasks:
     -
-      name: Kill Containers
+      name: Kill Containers (Client)
       containers.podman.podman_container:
         name: "{{ item }}"
         state: absent
         timeout: 5
-      loop: "{{ groups['molecule'] }}"
+      loop: "{{ groups['client'] }}"
+    -
+      name: Kill Containers (Server)
+      containers.podman.podman_container:
+        name: "{{ item }}"
+        state: absent
+        timeout: 5
+      loop: "{{ groups['server'] }}"
+    -
+      name: Remove network
+      containers.podman.podman_network:
+        name: molecule_network
+        state: absent

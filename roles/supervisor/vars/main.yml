@@ -1,0 +1,8 @@
+# Input your own overrides
+supervisor_services_override: []
+#  - name: consul
+#    state: stopped
+#  - name: nomad
+#    state: stopped
+#  - name: vault
+#    state: absent

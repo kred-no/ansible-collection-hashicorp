@@ -6,6 +6,7 @@ dependency:
 ansible:
   cfg:
     defaults:
+      forks: 5
       deprecation_warnings: false
   executor:
     args:
@@ -19,6 +20,8 @@ scenario:
     - create
     - converge
   verify_sequence:
+    - create
+    - converge
     - verify
   test_sequence:
     - destroy
@@ -30,13 +33,10 @@ scenario:
     - destroy
   cleanup_sequence:
     - destroy
-    - cleanup
+    - cleanup 
 
 provisioner:
   name: ansible
-  #playbooks:
-  #  converge: converge.yml
-  #  cleanup: cleanup.yml
 
 # Use 'default' scenario state
 shared_state: false

@@ -1,0 +1,15 @@
+; supervisor service definition (ex. /etc/supervisor/conf.d/<file>)
+; {{ ansible_managed }}
+
+[program:{{ item.name }}]
+command={{ item.cmd }}
+user={{ item.user | default('root') }}
+autostart={{ item.autostart | default (true) }}
+autorestart={{ item.autorestart | default (true) }}
+
+{% if item.container | default(true) | bool %}
+; container logging to stdout
+stdout_logfile=/dev/fd/1
+stdout_logfile_maxbytes=0
+redirect_stderr=true
+{% endif %}

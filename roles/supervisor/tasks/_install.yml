@@ -1,0 +1,19 @@
+-
+  name: Install required packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ supervisor_packages }}"
+    state: present
+-
+  name: Create a virtualenv
+  become: true
+  ansible.builtin.command:
+    cmd: "python3 -m venv {{ supervisor_venv_path }}"
+    creates: "{{ supervisor_venv_path }}/bin/activate"
+-
+  name: Install pip packages
+  become: true
+  ansible.builtin.pip:
+    name: supervisor
+    state: present
+    virtualenv: "{{ supervisor_venv_path }}"

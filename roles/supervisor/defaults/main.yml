@@ -1,0 +1,34 @@
+supervisor_install: false
+
+supervisor_venv_path: /opt/supervisor-venv
+supervisor_bin_path: /usr/bin
+supervisor_config_path: /etc/supervisor
+supervisor_include_path: /etc/supervisor/conf.d
+
+supervisor_packages_map:
+  debian:
+    - python3-pip
+    - python3-venv
+  redhat:
+    - python3-pip
+    - python3-virtualenv
+    - python3-packaging
+
+supervisor_packages: "{{ supervisor_packages_map[ansible_os_family | lower] }}"
+
+supervisor_services: []
+#  -
+#    name: consul
+#    bin_file: /usr/local/bin/consul
+#    cmd: consul agent -config-dir=/etc/consul.d
+#    state: present
+#  -
+#    name: nomad
+#    bin_file: /usr/local/bin/nomad
+#    cmd: nomad agent -config=/etc/nomad.d
+#    state: present
+#  -
+#    name: vault
+#    bin_file: /usr/local/bin/vault
+#    cmd: vault agent -config=/etc/vault.d
+#    state: present

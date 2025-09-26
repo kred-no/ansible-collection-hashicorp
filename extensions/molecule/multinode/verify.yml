@@ -5,20 +5,28 @@
 
   tasks:
     -
-      name: Check Nomad Version
-      ansible.builtin.command: "nomad version"
-      register: nomad_output
-      changed_when: false
+      name: NOMAD
+      when: hashicluster_role.nomad.install | default(false)
+      block:
+        -
+          name: Check Nomad Version
+          ansible.builtin.command: "nomad version"
+          register: nomad_output
+          changed_when: false
+        -
+          name: Print Nomad Version
+          ansible.builtin.debug:
+            msg: "{{ nomad_output.stdout | regex_search('Nomad v([0-9.]+)', '\\1') }}"
     -
-      name: Print Nomad Version
-      ansible.builtin.debug:
-        msg: "{{ nomad_output.stdout | regex_search('Nomad v([0-9.]+)', '\\1') }}"
-    -
-      name: Check Consul Version
-      ansible.builtin.command: "consul version --format=json"
-      register: consul_output
-      changed_when: false
-    -
-      name: Print Consul Version
-      ansible.builtin.debug:
-        msg: "{{ (consul_output.stdout | from_json).Version }}"
+      name: CONSUL
+      when: hashicluster_role.consul.install | default(false)
+      block:
+        -
+          name: Check Consul Version
+          ansible.builtin.command: "consul version --format=json"
+          register: consul_output
+          changed_when: false
+        -
+          name: Print Consul Version
+          ansible.builtin.debug:
+            msg: "{{ (consul_output.stdout | from_json).Version }}"

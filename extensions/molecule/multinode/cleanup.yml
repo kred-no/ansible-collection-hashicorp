@@ -2,6 +2,7 @@
   name: Cleanup Resources
   hosts: localhost
   gather_facts: false
+  #become: true
 
   tasks:
     -

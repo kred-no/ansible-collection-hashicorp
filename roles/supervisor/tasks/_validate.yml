@@ -1,0 +1,11 @@
+-
+  name: OS Family
+  when: # Stop the play if OS is NOT Debian or RedHat, unless 'force_install' is true
+    - ansible_os_family | lower not in ['debian', 'redhat']
+    - not (force_install | default(false))
+  block:
+    - name: OS Family Validation
+      ansible.builtin.debug:
+        msg: "{{ ansible_os_family }} is not supported"
+    - name: OS Family Validation Failed
+      ansible.builtin.meta: end_play

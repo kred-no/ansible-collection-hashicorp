@@ -15,9 +15,8 @@ hashicluster_role:
       enabled: false
     config:
       datacenter: dev-dc1
-      log_level: err
-      server: true
       data_dir: /opt/consul
+      server: true
       bootstrap_expect: 1
       client_addr: "0.0.0.0"
       performance:
@@ -27,10 +26,10 @@ hashicluster_role:
         - 8.8.4.4
       connect:
         enabled: true
-      ports:
-        grpc: 8502
       ui_config:
         enabled: true
+      ports:
+        grpc: 8502
 
   nomad:
     install: true
@@ -38,6 +37,22 @@ hashicluster_role:
       enabled: false
     config:
       datacenter: dev-dc1
+      data_dir: /opt/nomad
       server:
         enabled: true
         bootstrap_expect: 1
+      consul:
+        address: 127.0.0.1:8500
+        ssl: false
+
+supervisor_services:
+  -
+    name: consul
+    bin_file: /usr/local/bin/consul
+    cmd: consul agent -config-dir=/etc/consul.d
+    state: present
+  -
+    name: nomad
+    bin_file: /usr/local/bin/nomad
+    cmd: nomad agent -config=/etc/nomad.d
+    state: present

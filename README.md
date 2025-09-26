@@ -21,9 +21,9 @@ Installation of HashiCorp Vault, Consul & Nomad from official repositories
 # Example for downloading directly from git
 ---
 collections:
-  - name: https://github.com/Kreditorforeningens-Driftssentral-DA/ansible-collection-hashicluster.git
+  - name: https://github.com/kred-no/ansible-collection-hashicorp.git
     type: git
-    version: development
+    version: main
 ```
 
 > File: playbook.yaml
@@ -51,7 +51,7 @@ collections:
     -
       name: Install CNI-Plugins
       include_role:
-        name: cni
+        name: cni # kred.hashicorp.cni
       vars:
         cni:
           install: true
@@ -59,11 +59,12 @@ collections:
     -
       name: Install Applications
       include_role:
-        name: hashicorp
+        name: hashicluster # kred.hashicorp.hashicluster
       vars:
         dns:
           forward: true
         cluster:
+          # --- Consul ---
           consul:
             install: true
             config:
@@ -82,6 +83,7 @@ collections:
                 enabled: true
               ports:
                 grpc: 8502
+          # --- Nomad ---
           nomad:
             install: true
             version: '1.0.4'

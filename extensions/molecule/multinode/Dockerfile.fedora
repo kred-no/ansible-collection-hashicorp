@@ -2,9 +2,13 @@ FROM docker.io/fedora:latest
 
 USER root
 
+ENV container=podman
+
 RUN set -e \
-  && dnf install -y python3 sudo dumb-init \
+  && dnf install -y \
+    python3 sudo dumb-init supervisor \
+    iputils iproute curl \
   && dnf clean all
 
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["sleep", "1d"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf", "-n"]

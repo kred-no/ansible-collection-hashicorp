@@ -1,0 +1,42 @@
+# See https://docs.ansible.com/ansible/latest/collections/community/general/supervisorctl_module.html
+---
+- 
+  name: Ensure supervisor config directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0644'
+  loop:
+    - "{{ supervisor_config_path }}"
+    - "{{ supervisor_include_path }}"
+-
+  name: Manage supervisord config file
+  become: true
+  ansible.builtin.template:
+    src: supervisord.conf.j2
+    dest: "{{ supervisor_config_path }}/supervisord.conf"
+    owner: root
+    group: root
+    mode: '0644'
+-
+  name: Manage supervisord include files
+  become: true
+  ansible.builtin.template:
+    src: service.conf.j2
+    dest: "{{ supervisor_include_path }}/{{ item.name }}.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ supervisor_services }}"
+-
+  name: Manage the state of applications
+  become: true
+  community.general.supervisorctl:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    config: "{{ supervisor_config_path }}/supervisord.conf"
+    supervisorctl_path: "{{ supervisor_bin_path }}/supervisorctl"
+  loop: "{{ supervisor_services }}"

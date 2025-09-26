@@ -1,6 +1,7 @@
 # Folders
-**/.ansible/*
-**/legacy/*
+**/.ansible/
+**/legacy/
+**/.vscode/
 
 # Files
 *.backup
@@ -8,4 +9,3 @@
 *.tar.gz
 
 secret.*
-
