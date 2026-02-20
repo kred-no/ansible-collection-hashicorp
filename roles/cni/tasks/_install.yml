@@ -28,7 +28,7 @@
   ansible.builtin.get_url:
     url: "http://github.com/containernetworking/plugins/releases/download/v{{ item['version'] }}/cni-plugins-linux-amd64-v{{ item['version'] }}.tgz"
     dest: "{{ item['dest'] }}/cni-plugins-linux-amd64-v{{ item['version'] }}.tgz"
-    checksum: "sha1:https://github.com/containernetworking/plugins/releases/download/v{{ item['version'] }}/cni-plugins-linux-amd64-v{{ item['version'] }}.tgz.sha1"
+    checksum: "sha256:https://github.com/containernetworking/plugins/releases/download/v{{ item['version'] }}/cni-plugins-linux-amd64-v{{ item['version'] }}.tgz.256"
     mode: '0644'
     timeout: 300
   loop:
